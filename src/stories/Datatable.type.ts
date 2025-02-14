@@ -29,7 +29,7 @@ type ColumnDef = (
   orderable?: boolean
 }
 
-type LengthMenu = {
+export type LengthMenu = {
   label: string;
   value: number;
 }
@@ -39,27 +39,34 @@ type OrderTable = {
   order: 'ASC' | 'DESC' | 1 | 0;
 }
 
+type Headers = {
+  label: string;
+  rowspan: number;
+  colspan: number;
+}
+
 export type DatatableType<T = any> = (| {
-  data: [Data<T>, React.Dispatch<React.SetStateAction<Data<T>>>];
+  data: [T[], React.Dispatch<React.SetStateAction<T[]>>];
   getData?: never;
 } | {
   getData: (
     page: number,
     records: number,
-    rows: string | string[],
-    orderValue: string | string[] | OrderPetition | OrderPetition[]
+    rows: (keyof T | null)[],
+    orderValue: ([number, 'ASC' | 'DESC' | 1 | 0] | OrderTable)[]
   ) => Promise<Data<T>>;
   data?: never
 }) & {
-  headers: string[];
+  headers: string[] | Headers[][];
   columns: Column<T>[];
   columnDef?: ColumnDef[];
   control?: 'back' | 'front';
+  defaultRecords?: number;
   pagging?: boolean;
   info?: boolean;
   searching?: boolean;
   saveState?: boolean;
   lengthMenu?: (number | LengthMenu)[];
-  order?: [([string, number] | OrderTable)];
+  order?: ([number, 'ASC' | 'DESC' | 1 | 0] | OrderTable)[];
   stateRefresh?: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
 }
