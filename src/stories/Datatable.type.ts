@@ -61,7 +61,6 @@ export type DatatableType<T = any> = (| {
   columns: Column<T>[];
   columnDef?: ColumnDef[];
   control?: 'back' | 'front';
-  defaultRecords?: number;
   pagging?: boolean;
   info?: boolean;
   searching?: boolean;

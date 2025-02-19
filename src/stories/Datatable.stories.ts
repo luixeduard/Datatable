@@ -16,7 +16,7 @@ const meta = {
 
   },
   args: {
-
+    
   },
 } satisfies Meta<typeof Datatable<Data>>;
 
