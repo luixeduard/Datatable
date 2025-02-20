@@ -45,6 +45,7 @@ export default function Datatable<T>({
   }, [control, refresh])
 
   function onChangeSelectPages(event: React.ChangeEvent<HTMLSelectElement>) {
+    setPage(0)
     setRecords(Number(event.currentTarget.value))
     setRefresh(true)
   }
