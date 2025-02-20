@@ -37,6 +37,49 @@ export default function Pagination({ count, pageState, records, lengthMenu, onCh
     }
   }, [count, page, records])
 
+  function renderButton(value: number | "first" | "last" | "next" | "before", index: number) {
+    if (typeof value === "number") {
+      return <div onClick={() => setPage(value - 1)} aria-current={page + 1 === value ? 'page' : undefined} className={`${index === 0 && 'rounded-s-lg'} ${index === Buttons.length - 1 && 'rounded-e-lg'} ${page + 1 === value && 'z-10'} flex items-center justify-center px-4 h-10 leading-tight ${page + 1 === value ? 'text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white' : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'}`}>{value}</div>
+    } else if (value === 'before') {
+      return (
+        <div onClick={() => setPage(page - 1)} className={`flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 ${index === 0 && 'rounded-s-lg'} hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}>
+          <span className="sr-only">Anterior</span>
+          <svg className="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
+          </svg>
+        </div>
+      )
+    } else if (value === "first") {
+      return (
+        <div onClick={() => setPage(0)} className={`flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 ${index === 0 && 'rounded-s-lg'} hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}>
+          <span className="sr-only">Primera pagina</span>
+          <svg className="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 1 1 5l2 4" />
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 1 5 5l2 4" />
+          </svg>
+        </div>
+      )
+    } else if (value === "next") {
+      return (
+        <div onClick={() => setPage(page + 1)} className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 ${index === Buttons.length - 1 && 'rounded-e-lg'} hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}>
+          <span className="sr-only">Siguiente</span>
+          <svg className="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+          </svg>
+        </div>
+      )
+    }
+    return (
+      <div onClick={() => setPage(count ? Math.ceil(count / records) - 1 : 0)} className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 ${index === Buttons.length - 1 && 'rounded-e-lg'} hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}>
+        <span className="sr-only">Ultima pagina</span>
+        <svg className="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 10">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1 3 5l-2 4" />
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 7 5l-2 4" />
+        </svg>
+      </div>
+    )
+  }
+
   return (
     <nav className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
       <div className="block">
@@ -51,51 +94,9 @@ export default function Pagination({ count, pageState, records, lengthMenu, onCh
       <nav aria-label="Pagination Datatable">
         <ul className="flex items-center -space-x-px h-8 text-sm">
           {Buttons.map((valuePagging, index) => (
-            <>
-              {typeof valuePagging === "number" ?
-                <li>
-                  <div onClick={() => setPage(valuePagging - 1)} aria-current={page + 1 === valuePagging ? 'page' : undefined} className={`${index === 0 && 'rounded-s-lg'} ${index === Buttons.length - 1 && 'rounded-e-lg'} ${page + 1 === valuePagging && 'z-10'} flex items-center justify-center px-4 h-10 leading-tight ${page + 1 === valuePagging ? 'text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white' : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'}`}>{valuePagging}</div>
-                </li >
-                : valuePagging === 'before' ?
-                  <li>
-                    <div onClick={() => setPage(page - 1)} className={`flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 ${index === 0 && 'rounded-s-lg'} hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}>
-                      <span className="sr-only">Anterior</span>
-                      <svg className="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
-                      </svg>
-                    </div>
-                  </li>
-                  : valuePagging === 'first' ?
-                    <li>
-                      <div onClick={() => setPage(0)} className={`flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 ${index === 0 && 'rounded-s-lg'} hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}>
-                        <span className="sr-only">Primera pagina</span>
-                        <svg className="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 10">
-                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 1 1 5l2 4" />
-                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 1 5 5l2 4" />
-                        </svg>
-                      </div>
-                    </li>
-                    : valuePagging === "next" ?
-                      <li>
-                        <div onClick={() => setPage(page + 1)} className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 ${index === Buttons.length - 1 && 'rounded-e-lg'} hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}>
-                          <span className="sr-only">Siguiente</span>
-                          <svg className="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
-                          </svg>
-                        </div>
-                      </li> :
-                      <li>
-                        <div onClick={() => setPage(count ? Math.ceil(count / records) - 1 : 0)} className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 ${index === Buttons.length - 1 && 'rounded-e-lg'} hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}>
-                          <span className="sr-only">Ultimo</span>
-                          <svg className="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1 3 5l-2 4" />
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 7 5l-2 4" />
-                          </svg>
-                        </div>
-                      </li>
-
-              }
-            </>
+            <li>
+              {renderButton(valuePagging, index)}
+            </li >
           ))}
         </ul>
       </nav>

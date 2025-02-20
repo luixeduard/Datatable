@@ -71,13 +71,37 @@ export default function Datatable<T>({
             {!advancedHeaders ? (
               <tr>
                 {
-                  headers.map(head => (<th scope="col" className="px-6 py-3">{head}</th>))
+                  headers.map(head => (
+                    <th scope="col" className="px-6 py-3">
+                      <span className="flex items-center">
+                        {head}
+                        <svg className="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                          <path stroke="blue" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 19l-4-4" />
+                          <path stroke="blue" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 19l4-4" />
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 5l-4 4" />
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 5l4 4" />
+                        </svg>
+                      </span>
+                    </th>
+                  ))
                 }
               </tr>
             ) : <>
               {headers.map(headers => (
                 <tr>
-                  {headers.map(header => <th rowSpan={header.rowspan} colSpan={header.colspan}>{header.label}</th>)}
+                  {headers.map(header => (
+                    <th rowSpan={header.rowspan} colSpan={header.colspan}>
+                      <span className="flex items-center">
+                        {header.label}
+                        <svg className="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 19l-4-4" />
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 19l4-4" />
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 5l-4 4" />
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 5l4 4" />
+                        </svg>
+                      </span>
+                    </th>
+                  ))}
                 </tr>
               ))}
             </>
