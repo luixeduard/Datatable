@@ -1,11 +1,19 @@
-type Column<T = any> = {
-  fieldName: keyof T | null;
+export type Column<T = any> = {
+  fieldName: NestedKey<T> | keyof T | null;
   orderValue?: keyof T | null;
   renderFn?: <K = {}>(
     data: T | keyof T,
   ) => K;
   format?: 'currency' | 'date' | ((data: T | keyof T) => string),
 }
+
+export type NestedKey<T> = T extends object
+  ? {
+      [K in keyof T]: K extends string
+        ? `${K}` | `${K}.${NestedKey<T[K]>}`
+        : never;
+    }[keyof T]
+  : never;
 
 type OrderPetition = {
   column: string;
@@ -19,13 +27,15 @@ type Data<T = any> = {
   count: number;
 }
 
-type ColumnDef = (
+type ClassNameType = React.HTMLAttributes<HTMLElement>["className"];
+
+export type ColumnDef = (
   | { target: number | "_all"; targets?: never }
-  | { targets: number[] | "_all"; target?: never }
+  | { targets: number[]; target?: never }
 ) & {
   visible?: boolean;
   searchable?: boolean;
-  classname?: string;
+  classname?: ClassNameType;
   orderable?: boolean
 }
 
@@ -39,7 +49,7 @@ type OrderTable = {
   order: 'ASC' | 'DESC' | 1 | 0;
 }
 
-type Headers = {
+export type Headers = {
   label: string;
   rowspan: number;
   colspan: number;
@@ -52,7 +62,7 @@ export type DatatableType<T = any> = (| {
   getData: (
     page: number,
     records: number,
-    rows: (keyof T | null)[],
+    rows: string[],
     orderValue: ([number, 'ASC' | 'DESC' | 1 | 0] | OrderTable)[]
   ) => Promise<Data<T>>;
   data?: never
@@ -67,5 +77,6 @@ export type DatatableType<T = any> = (| {
   saveState?: boolean;
   lengthMenu?: (number | LengthMenu)[];
   order?: ([number, 'ASC' | 'DESC' | 1 | 0] | OrderTable)[];
+  multiple_order?: true;
   stateRefresh?: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
 }
