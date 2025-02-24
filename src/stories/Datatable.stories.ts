@@ -54,6 +54,8 @@ export const Primary: Story = {
       const { data: dataPetition } = await axios.get(`https://fakeapi.net/products?page=${page + 1}&limit=${records}&order=${orderValue[0]}&sort=${orderValue[1]}`)
       const { data, pagination } = dataPetition;
       console.log(data, pagination)
+      console.log(rows)
+      console.log(search)
       return {
         rows: data,
         page: pagination.page - 1,
