@@ -6,7 +6,7 @@ interface Data {
 }
 
 const meta = {
-  title: 'Example/Button',
+  title: 'Datatable',
   component: Datatable<Data>,
   parameters: {
 
