@@ -50,7 +50,7 @@ export const Primary: Story = {
     columnDef: [
       { target: 0, classname: "text-center", visible: false }
     ],
-    getData: async (page, records, rows, orderValue) => {
+    getData: async (page, records, rows, orderValue, search) => {
       const { data: dataPetition } = await axios.get(`https://fakeapi.net/products?page=${page + 1}&limit=${records}&order=${orderValue[0]}&sort=${orderValue[1]}`)
       const { data, pagination } = dataPetition;
       console.log(data, pagination)

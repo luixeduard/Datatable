@@ -1,6 +1,6 @@
 export type Column<T = any> = {
   fieldName: NestedKey<T> | keyof T | null;
-  orderValue?: keyof T | null;
+  orderValue?: NestedKey<T> | keyof T | null;
   renderFn?: <K = {}>(
     data: T | keyof T,
   ) => K;
@@ -14,11 +14,6 @@ export type NestedKey<T> = T extends object
         : never;
     }[keyof T]
   : never;
-
-type OrderPetition = {
-  column: string;
-  order: 'ASC' | 'DESC' | 1 | 0;
-}
 
 type Data<T = any> = {
   rows: T[];
@@ -44,9 +39,9 @@ export type LengthMenu = {
   value: number;
 }
 
-type OrderTable = {
+export type OrderTable = {
   idx: number,
-  order: 'ASC' | 'DESC' | 1 | 0;
+  order: 'ASC' | 'DESC' | 1 | -1;
 }
 
 export type Headers = {
@@ -63,7 +58,8 @@ export type DatatableType<T = any> = (| {
     page: number,
     records: number,
     rows: string[],
-    orderValue: ([number, 'ASC' | 'DESC' | 1 | 0] | OrderTable)[]
+    orderValue: [number, 'ASC' | 'DESC' | 1 | -1][],
+    search?: string
   ) => Promise<Data<T>>;
   data?: never
 }) & {
@@ -76,7 +72,7 @@ export type DatatableType<T = any> = (| {
   searching?: boolean;
   saveState?: boolean;
   lengthMenu?: (number | LengthMenu)[];
-  order?: ([number, 'ASC' | 'DESC' | 1 | 0] | OrderTable)[];
+  order?: ([number, 'ASC' | 'DESC' | 1 | -1] | OrderTable)[];
   multiple_order?: boolean;
   stateRefresh?: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
 }

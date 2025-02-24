@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Column, ColumnDef, DatatableType, Headers, NestedKey } from "./Datatable.type";
+import { Column, ColumnDef, DatatableType, Headers, NestedKey, OrderTable } from "./Datatable.type";
 import Pagination from "./Pagination";
 import { v4 } from "uuid";
 
@@ -10,7 +10,7 @@ export default function Datatable<T>({
   data,
   getData,
   columns,
-  order = [[0, "DESC"]],
+  order = [],
   multiple_order = false,
   lengthMenu = [5, 10, 20, 40, 100],
   stateRefresh,
@@ -19,9 +19,11 @@ export default function Datatable<T>({
 }: DatatableType<T>) {
   const [allData, setAllData] = control === "front" && data ? data : useState<T[]>([]);
   const [page, setPage] = useState<number>(0)
+  const [search, setSearch] = useState<string>()
   const [records, setRecords] = useState<number>(typeof lengthMenu[0] === "number" ? lengthMenu[0] : lengthMenu[0].value)
   const [count, setCount] = useState<number | undefined>()
-  const [refresh, setRefresh] = !stateRefresh ? useState<boolean>(false): stateRefresh
+  const [refresh, setRefresh] = !stateRefresh ? useState<boolean>(false) : stateRefresh
+  const [orderCol, setOrderCol] = useState<[number, -1 | "ASC" | "DESC" | 1][]>(order.map(ord => Array.isArray(ord) ? ord : [ord.idx, ord.order]))
   const filters = ((new Array(headers.length).fill(null).map((_c, index) => {
     const visible = !columnDef ? true : getValueColumnDef(index, "visible")
     const searchable = !columnDef ? true : getValueColumnDef(index, "searchable")
@@ -51,7 +53,7 @@ export default function Datatable<T>({
       if (!getData) {//Si el getData no esta definido dar error
         throw new Error("No se definio la funcion getData")
       }
-      getData(page, records, columns.map(col => (col.orderValue || col.fieldName) as string), order).then((data) => {
+      getData(page, records, columns.map(col => (col.orderValue || col.fieldName) as string), orderCol, search).then((data) => {
         if (setAllData) {
           setAllData(data.rows);
           setPage(data.page);
@@ -115,6 +117,56 @@ export default function Datatable<T>({
     setRefresh(true)
   }, [records, page])
 
+  useEffect(() => {
+    if (search) {
+      setRefresh(true)
+    }
+  }, [search])
+
+  useEffect(() => {
+    setRefresh(true)
+  }, [orderCol])
+
+  function setOrder(index: number) {
+    setOrderCol((current) => {
+      const find = current.find(curr => curr[0] === index);
+      if (find) {
+        const is_asc = [1, "ASC"].includes(find[1])
+        const idx = find[0]
+        if (is_asc) {
+          return [
+            ...current.filter(curr => curr[0] !== index),
+            [idx, "DESC"]]
+        }
+        return [
+          ...current.filter(curr => curr[0] !== index)
+        ]
+      } else {
+        return [...current, [index, "ASC"]]
+      }
+    })
+  }
+
+  function renderOrder(index: number) {
+    const find = orderCol.find(ord => ord[0] === index)
+    const order = find?.[1]
+    return (
+      <svg className="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        {!(find && order) ? (<></>) : order === "ASC" ? (
+          <>
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 5l-4 4" />
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 5l4 4" />
+          </>
+        ) : (
+          <>
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 19l-4-4" />
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 19l4-4" />
+          </>
+        )}
+      </svg>
+    )
+  }
+
   return (
     <>
       {searching && (
@@ -126,7 +178,7 @@ export default function Datatable<T>({
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
               </svg>
             </div>
-            <input type="text" id="table-search" className="block py-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..." />
+            <input type="text" onInput={({ currentTarget }) => setSearch(currentTarget.value)} id="table-search" className="block py-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..." />
           </div>
         </div>
       )}
@@ -136,16 +188,11 @@ export default function Datatable<T>({
             {!advancedHeaders ? (
               <tr>
                 {
-                  headers.filter(filterColumn).map((head) => (
-                    <th scope="col" className="px-6 py-3" key={v4()}>
+                  headers.filter(filterColumn).map((head, index) => (
+                    <th scope="col" className={`px-6 py-3 ${filters.find((filter) => filter.target === index)?.orderable && "hover:bg-gray-400 dark:hover:bg-gray-600 cursor-pointer"}`} onClick={() => setOrder(index)} key={v4()}>
                       <span className="flex items-center">
                         {head}
-                        <svg className="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                          <path stroke="blue" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 19l-4-4" />
-                          <path stroke="blue" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 19l4-4" />
-                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 5l-4 4" />
-                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 5l4 4" />
-                        </svg>
+                        {renderOrder(index)}
                       </span>
                     </th >
                   ))
