@@ -18,10 +18,10 @@ export default function Datatable<T>({
   searching = true
 }: DatatableType<T>) {
   const [allData, setAllData] = control === "front" && data ? data : useState<T[]>([]);
-  const [page, setPage] = useState(0)
-  const [records, setRecords] = useState(typeof lengthMenu[0] === "number" ? lengthMenu[0] : lengthMenu[0].value)
+  const [page, setPage] = useState<number>(0)
+  const [records, setRecords] = useState<number>(typeof lengthMenu[0] === "number" ? lengthMenu[0] : lengthMenu[0].value)
   const [count, setCount] = useState<number | undefined>()
-  const [refresh, setRefresh] = stateRefresh ? stateRefresh : useState<boolean>(true)
+  const [refresh, setRefresh] = !stateRefresh ? useState<boolean>(false): stateRefresh
   const filters = ((new Array(headers.length).fill(null).map((_c, index) => {
     const visible = !columnDef ? true : getValueColumnDef(index, "visible")
     const searchable = !columnDef ? true : getValueColumnDef(index, "searchable")
@@ -60,7 +60,7 @@ export default function Datatable<T>({
         }
       })
     }
-  }, [control, refresh])
+  }, [refresh])
 
   function onChangeSelectPages(event: React.ChangeEvent<HTMLSelectElement>) {
     setPage(0)
@@ -111,10 +111,14 @@ export default function Datatable<T>({
     return filters.findIndex(fi => fi.target === index && fi.visible === false) === -1
   }
 
+  useEffect(() => {
+    setRefresh(true)
+  }, [records, page])
+
   return (
     <>
       {searching && (
-        <div className="pb-4 bg-white dark:bg-gray-900">
+        <div className="mb-4">
           <label htmlFor="table-search" className="sr-only">Search</label>
           <div className="relative mt-1">
             <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -128,12 +132,12 @@ export default function Datatable<T>({
       )}
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
             {!advancedHeaders ? (
               <tr>
                 {
                   headers.filter(filterColumn).map((head) => (
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-6 py-3" key={v4()}>
                       <span className="flex items-center">
                         {head}
                         <svg className="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -149,10 +153,10 @@ export default function Datatable<T>({
               </tr>
             ) : <>
               {headers.map(headers => (
-                <tr>
+                <tr key={v4()}>
                   {headers.filter(filterColumn).map((header) => (
                     <>
-                      <th rowSpan={header.rowspan} colSpan={header.colspan}>
+                      <th key={v4()} rowSpan={header.rowspan} colSpan={header.colspan}>
                         <span className="flex items-center">
                           {header.label}
                           <svg className="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -172,11 +176,11 @@ export default function Datatable<T>({
           </thead >
           <tbody>
             {allData.map(row => (
-              <tr key={v4()}>
+              <tr key={v4()} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 even:hover:bg-gray-100 even:dark:hover:bg-gray-700">
                 {columns
                   .filter(filterColumn)
                   .map((column) => (
-                    <td>{renderTd(column, row)}</td>
+                    <td key={v4()} className={`p-3`}>{renderTd(column, row)}</td>
                   ))}
               </tr>)
             )}
@@ -184,7 +188,7 @@ export default function Datatable<T>({
         </table>
       </div >
       {pagging && (
-        <Pagination onChangeSelectPages={onChangeSelectPages} count={count} lengthMenu={lengthMenu} pageState={[page, setPage]} records={records} />
+        <Pagination onChangeSelectPages={onChangeSelectPages} count={count} lengthMenu={lengthMenu} page={page} setPage={setPage} records={records} />
       )
       }
 

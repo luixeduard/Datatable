@@ -77,6 +77,6 @@ export type DatatableType<T = any> = (| {
   saveState?: boolean;
   lengthMenu?: (number | LengthMenu)[];
   order?: ([number, 'ASC' | 'DESC' | 1 | 0] | OrderTable)[];
-  multiple_order?: true;
+  multiple_order?: boolean;
   stateRefresh?: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
 }
