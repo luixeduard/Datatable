@@ -8,8 +8,7 @@ const currencyFormat = Intl.NumberFormat("es-MX", { style: "currency", currency:
 const decimalFormat = Intl.NumberFormat("es-MX", { style: "decimal" })
 const percentFormat = Intl.NumberFormat("es-MX", { style: "percent" })
 
-function setStateAllData<T>(control: "front" | "back", data?: [T[], React.Dispatch<React.SetStateAction<T[]>>] | [T[]]) {
-  if (control === "back") return useState<T[]>([]) //SI CONTROL ES POR BACK
+function setStateAllData<T>(data?: [T[], React.Dispatch<React.SetStateAction<T[]>>] | [T[]]) {
   if (data) { //SI EXISTE DATA QUIERE DECIR QUE NO HAY GET DATA
     if (data.length === 1) { //SI DATA.LENGTH ES 1
       return useState<T[]>(data[0]) //SE INSTANCIA NUEVO USE STATE PARA CONTROLAR LA INFORMACIÓN
@@ -35,7 +34,7 @@ export default function Datatable<T>({
   searching = true,
   info = true
 }: DatatableType<T>) {
-  const [allData, setAllData] = setStateAllData(control, data)
+  const [allData, setAllData] = setStateAllData(data)
   const [currentData, setCurrentData] = useState<T[]>([]);
   const [page, setPage] = useState<number>(0)
   const [search, setSearch] = useState<string>()
