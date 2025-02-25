@@ -8,6 +8,17 @@ const currencyFormat = Intl.NumberFormat("es-MX", { style: "currency", currency:
 const decimalFormat = Intl.NumberFormat("es-MX", { style: "decimal" })
 const percentFormat = Intl.NumberFormat("es-MX", { style: "percent" })
 
+function setStateAllData<T>(control: "front" | "back", data?: [T[], React.Dispatch<React.SetStateAction<T[]>>] | [T[]]) {
+  if (control === "back") return useState<T[]>([]) //SI CONTROL ES POR BACK
+  if (data) { //SI EXISTE DATA QUIERE DECIR QUE NO HAY GET DATA
+    if (data.length === 1) { //SI DATA.LENGTH ES 1
+      return useState<T[]>(data[0]) //SE INSTANCIA NUEVO USE STATE PARA CONTROLAR LA INFORMACIÓN
+    }
+    return data //SI EL DATA.LENGTH ES 2 RETORNAMOS EL USE STATE
+  }
+  return useState<T[]>([]) //EXISTE GETDATA Y HAY QUE CONTROLAR DICHA INFORMACION
+}
+
 export default function Datatable<T>({
   headers,
   footers,
@@ -24,7 +35,8 @@ export default function Datatable<T>({
   searching = true,
   info = true
 }: DatatableType<T>) {
-  const [allData, setAllData] = control === "back" || !data ? useState<T[]>([]) : data.length === 1 ? useState(data[0]) : data;
+  const [allData, setAllData] = setStateAllData(control, data)
+  const [currentData, setCurrentData] = useState<T[]>([]);
   const [page, setPage] = useState<number>(0)
   const [search, setSearch] = useState<string>()
   const [records, setRecords] = useState<number>(typeof lengthMenu[0] === "number" ? lengthMenu[0] : lengthMenu[0].value)
@@ -67,7 +79,7 @@ export default function Datatable<T>({
       setLoading(true)
       getData(page, records, columns.map(col => (col.orderValue || col.fieldName) as string), orderCol, search).then((data) => {
         setLoading(false)
-        setAllData(data.rows);
+        setCurrentData(data.rows);
         setPage(data.page);
         setRecords(data.records);
         setCount(data.count)
@@ -321,7 +333,7 @@ export default function Datatable<T>({
               </>
             ) : (
               <>
-                {allData.map(row => (
+                {currentData.map(row => (
                   <tr key={v4()} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 even:hover:bg-gray-100 even:dark:hover:bg-gray-700">
                     <>
                       {columns

@@ -18,7 +18,7 @@ export type NestedKey<T> = T extends object
   }[keyof T]
   : never;
 
-type Data<T = any> = {
+export type Data<T = any> = {
   rows: T[];
   page: number;
   records: number;
@@ -47,6 +47,16 @@ export type OrderTable = {
   order: 'ASC' | 'DESC' | 1 | -1;
 }
 
+export type GetData<T> = (
+  page: number,
+  records: number,
+  rows: string[],
+  orderValue: [number, 'ASC' | 'DESC' | 1 | -1][],
+  search?: string
+) => Promise<Data<T>>
+
+export type GetVoidData<T> = () => Promise<Data<T>>
+
 export type Headers = {
   label: string;
   rowspan: number;
@@ -70,13 +80,7 @@ type CommonDatatableProps<T> = {
 
 type BackControlDatatable<T> = CommonDatatableProps<T> & {
   control: 'back';
-  getData: (
-    page: number,
-    records: number,
-    rows: string[],
-    orderValue: [number, 'ASC' | 'DESC' | 1 | -1][],
-    search?: string
-  ) => Promise<Data<T>>;
+  getData: GetData<T>;
   data?: never; // Asegura que `data` no esté presente
 };
 
@@ -86,7 +90,7 @@ type FrontControlDatatable<T> = CommonDatatableProps<T> & {
   data: [T[], React.Dispatch<React.SetStateAction<T[]>>] | [T[]];
   getData?: never; // Asegura que `getData` no esté presente
 } | {
-  getData: () => Promise<Data<T>>;
+  getData: GetVoidData<T>;
   data?: never
 });
 
