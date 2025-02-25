@@ -104,18 +104,13 @@ export default function Datatable<T>({
     setRefresh(true)
   }
 
-  function getValue(object: T, key: NestedKey<T>) {
-    const keys = (key as string).split(".")
-    let curr_object = object as any
-    keys.some(key => {
-      if (key in curr_object) {
-        curr_object = curr_object[key]
-        return false
+  function getValue<T, K extends NestedKey<T>>(object: T, key: K, defaultValue: unknown = "-"): unknown {
+    return (key as string).split(".").reduce((obj, key) => {
+      if (obj && typeof obj === "object") {
+        return (obj as Record<string, unknown>)[key];
       }
-      curr_object = "-";
-      return true
-    })
-    return curr_object
+      return defaultValue;
+    }, object as unknown);
   }
 
   function getValueColumnDef(index: number, key: keyof ColumnDef): boolean {
@@ -123,7 +118,7 @@ export default function Datatable<T>({
     return !filter ? true : filter[key] as boolean;
   }
 
-  function formatValue(column: Column<T>, value: T[keyof T]) {
+  function formatValue(column: Column<T>, value: T[keyof T] | unknown) {
     if (column.format) {
       try {
         if (column.format === "currency") {
@@ -163,7 +158,7 @@ export default function Datatable<T>({
           }
           return "Invalid Date"
         }
-        return column.format(value)
+        return column.format(value as T[keyof T])
       } catch (error) {
         return "-"
       }
@@ -409,7 +404,7 @@ export default function Datatable<T>({
                       {columns
                         .filter(filterColumn)
                         .map((column) => (
-                          <td key={v4()} className={`p-3`}>{renderTd(column, row)}</td>
+                          <td key={v4()} className={`p-3`}>{renderTd(column, row) as string | React.ReactNode}</td>
                         ))}
                     </>
                   </tr>)
