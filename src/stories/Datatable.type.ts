@@ -12,10 +12,10 @@ export type Column<T = any> = {
 
 export type NestedKey<T> = T extends object
   ? {
-      [K in keyof T]: K extends string
-        ? `${K}` | `${K}.${NestedKey<T[K]>}`
-        : never;
-    }[keyof T]
+    [K in keyof T]: K extends string
+    ? `${K}` | `${K}.${NestedKey<T[K]>}`
+    : never;
+  }[keyof T]
   : never;
 
 type Data<T = any> = {
@@ -53,24 +53,11 @@ export type Headers = {
   colspan: number;
 }
 
-export type DatatableType<T = any> = (| {
-  data: [T[], React.Dispatch<React.SetStateAction<T[]>>];
-  getData?: never;
-} | {
-  getData: (
-    page: number,
-    records: number,
-    rows: string[],
-    orderValue: [number, 'ASC' | 'DESC' | 1 | -1][],
-    search?: string
-  ) => Promise<Data<T>>;
-  data?: never
-}) & {
+type CommonDatatableProps<T> = {
   headers: string[] | Headers[][];
   footers?: string[] | Headers[][];
   columns: Column<T>[];
   columnDef?: ColumnDef[];
-  control?: 'back' | 'front';
   pagging?: boolean;
   info?: boolean;
   searching?: boolean;
@@ -79,4 +66,28 @@ export type DatatableType<T = any> = (| {
   order?: ([number, 'ASC' | 'DESC' | 1 | -1] | OrderTable)[];
   multiple_order?: boolean;
   stateRefresh?: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
-}
+};
+
+type BackControlDatatable<T> = CommonDatatableProps<T> & {
+  control: 'back';
+  getData: (
+    page: number,
+    records: number,
+    rows: string[],
+    orderValue: [number, 'ASC' | 'DESC' | 1 | -1][],
+    search?: string
+  ) => Promise<Data<T>>;
+  data?: never; // Asegura que `data` no esté presente
+};
+
+type FrontControlDatatable<T> = CommonDatatableProps<T> & {
+  control: 'front';
+} & ({
+  data: [T[], React.Dispatch<React.SetStateAction<T[]>>] | [T[]];
+  getData?: never; // Asegura que `getData` no esté presente
+} | {
+  getData: () => Promise<Data<T>>;
+  data?: never
+});
+
+export type DatatableType<T = any> = BackControlDatatable<T> | FrontControlDatatable<T>;

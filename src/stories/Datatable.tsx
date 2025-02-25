@@ -12,7 +12,7 @@ export default function Datatable<T>({
   headers,
   footers,
   columnDef,
-  control = "back",
+  control,
   data,
   getData,
   columns,
@@ -24,7 +24,7 @@ export default function Datatable<T>({
   searching = true,
   info = true
 }: DatatableType<T>) {
-  const [allData, setAllData] = control === "front" && data ? data : useState<T[]>([]);
+  const [allData, setAllData] = control === "back" || !data ? useState<T[]>([]) : data.length === 1 ? useState(data[0]) : data;
   const [page, setPage] = useState<number>(0)
   const [search, setSearch] = useState<string>()
   const [records, setRecords] = useState<number>(typeof lengthMenu[0] === "number" ? lengthMenu[0] : lengthMenu[0].value)
@@ -53,25 +53,38 @@ export default function Datatable<T>({
   }
 
   useEffect(() => {
-    if (control === "front") {
-      return
-    }
     if (refresh) { //Si se refresca la pagina se establece fresh en false
       setRefresh(false)
     } else { //Si el refresh esta en false se retorna
       return
     }
-    if (!getData) {//Si el getData no esta definido dar error
-      throw new Error("No se definio la funcion getData")
+    if (control === "back") {
+      if (!getData) {//Si el getData no esta definido dar error
+        throw new Error("No se definio la funcion getData")
+      }
     }
-    setLoading(true)
-    getData(page, records, columns.map(col => (col.orderValue || col.fieldName) as string), orderCol, search).then((data) => {
-      setLoading(false)
-      setAllData(data.rows);
-      setPage(data.page);
-      setRecords(data.records);
-      setCount(data.count)
-    })
+    if (control === "back") {
+      setLoading(true)
+      getData(page, records, columns.map(col => (col.orderValue || col.fieldName) as string), orderCol, search).then((data) => {
+        setLoading(false)
+        setAllData(data.rows);
+        setPage(data.page);
+        setRecords(data.records);
+        setCount(data.count)
+      })
+    } else {
+      if (getData) {
+        setLoading(true)
+        getData().then((data) => {
+          setLoading(false)
+          setAllData(data.rows);
+          setCount(data.count)
+        })
+      } else {
+        setCount(data[0].length)
+      }
+    }
+
   }, [refresh])
 
   function onChangeSelectPages(event: React.ChangeEvent<HTMLSelectElement>) {
