@@ -269,7 +269,7 @@ export default function Datatable<T>({
     )
   }
 
-  function sortDataMultilevel(data: T[]) {
+  function sortDataMultilevelMultisort(data: T[]) {
     if (orderCol.length === 0) {
       return data
     }
@@ -313,7 +313,7 @@ export default function Datatable<T>({
       return
     }
     if (allData) {
-      setAllData((curr) => sortDataMultilevel(curr))
+      setAllData((curr) => sortDataMultilevelMultisort(curr))
     }
   }, [allData, orderCol])
 
