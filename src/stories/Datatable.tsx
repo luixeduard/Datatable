@@ -220,6 +220,9 @@ export default function Datatable<T>({
   function setOrder(index: number) {
     setOrderCol((current) => {
       if (!multiple_order) {
+        if (current.length === 0) {
+          current.push([0, "ASC"])
+        }
         if (current[0][0] !== index) {
           return [[index, "ASC"]]
         }
@@ -265,6 +268,74 @@ export default function Datatable<T>({
       </svg>
     )
   }
+
+  function sortData(data: T[]) {
+    if (orderCol.length === 0) {
+      return data
+    }
+    return data.sort((a, b) => {
+      for (const [indexCol, order] of orderCol) {
+        const keyPath = columns.filter(filterColumn)[indexCol].fieldName as string || columns[indexCol].orderValue as string
+        if (!keyPath) {
+          return 0
+        }
+        // Accede al valor de la clave multinivel
+        const valueA = keyPath.split('.').reduce((obj: any, key) => obj?.[key], a);
+        const valueB = keyPath.split('.').reduce((obj: any, key) => obj?.[key], b);
+
+        // Manejo de valores undefined o null
+        if (valueA == null && valueB != null) return ["ASC", 1].includes(order) ? -1 : 1;
+        if (valueB == null && valueA != null) return ["ASC", 1].includes(order) ? 1 : -1;
+        if (valueA == null && valueB == null) continue;
+
+        // Comparación para strings y números
+        if (typeof valueA === "string" && typeof valueB === "string") {
+          const cmp = valueA.localeCompare(valueB);
+          if (cmp !== 0) return ["ASC", 1].includes(order) ? cmp : -cmp;
+        }
+        if (typeof valueA === "number" && typeof valueB === "number") {
+          const cmp = valueA - valueB;
+          if (cmp !== 0) return ["ASC", 1].includes(order) ? cmp : -cmp;
+        }
+        const dateA = valueA instanceof Date ? valueA : new Date(valueA);
+        const dateB = valueB instanceof Date ? valueB : new Date(valueB);
+        if (!isNaN(dateA.getTime()) && !isNaN(dateB.getTime())) {
+          const cmp = dateA.getTime() - dateB.getTime();
+          if (cmp !== 0) return ["ASC", 1].includes(order) ? cmp : -cmp;
+        }
+      }
+      return 0;
+    })
+  }
+
+  useEffect(() => {
+    if (control === "back") {
+      return
+    }
+    if (allData) {
+      setAllData((curr) => sortData(curr))
+    }
+  }, [allData, orderCol])
+
+  useEffect(() => {
+    console.log(data)
+  }, [allData])
+
+  /* function sliceData() {
+    if (orderCol) {
+      if (!multiple_order) {
+        setAllData((current) => {
+          if (!multiple_order) {
+            
+          }
+        })
+      }
+      
+    }
+    if (!search) {
+      
+    }
+  } */
 
   return (
     <>
