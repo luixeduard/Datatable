@@ -58,19 +58,20 @@ export default function Datatable<T>({
     } else { //Si el refresh esta en false se retorna
       return
     }
-    if (control === "back") {//Si el control esta por back
-      if (!getData) {//Si el getData no esta definido dar error
-        throw new Error("No se definio la funcion getData")
-      }
-      setLoading(true)
-      getData(page, records, columns.map(col => (col.orderValue || col.fieldName) as string), orderCol, search).then((data) => {
-        setLoading(false)
-        setAllData(data.rows);
-        setPage(data.page);
-        setRecords(data.records);
-        setCount(data.count)
-      })
+    if (control === "front") {
+      return
     }
+    if (!getData) {//Si el getData no esta definido dar error
+      throw new Error("No se definio la funcion getData")
+    }
+    setLoading(true)
+    getData(page, records, columns.map(col => (col.orderValue || col.fieldName) as string), orderCol, search).then((data) => {
+      setLoading(false)
+      setAllData(data.rows);
+      setPage(data.page);
+      setRecords(data.records);
+      setCount(data.count)
+    })
   }, [refresh])
 
   function onChangeSelectPages(event: React.ChangeEvent<HTMLSelectElement>) {
