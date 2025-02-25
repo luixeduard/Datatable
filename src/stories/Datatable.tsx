@@ -2,9 +2,15 @@ import { useEffect, useState } from "react";
 import { Column, ColumnDef, DatatableType, Headers, NestedKey } from "./Datatable.type";
 import Pagination from "./Pagination";
 import { v4 } from "uuid";
+import { format } from "date-fns";
+
+const currencyFormat = Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" })
+const decimalFormat = Intl.NumberFormat("es-MX", { style: "decimal" })
+const percentFormat = Intl.NumberFormat("es-MX", { style: "percent" })
 
 export default function Datatable<T>({
   headers,
+  footers,
   columnDef,
   control = "back",
   data,
@@ -15,7 +21,8 @@ export default function Datatable<T>({
   lengthMenu = [5, 10, 20, 40, 100],
   stateRefresh,
   pagging = true,
-  searching = true
+  searching = true,
+  info = true
 }: DatatableType<T>) {
   const [allData, setAllData] = control === "front" && data ? data : useState<T[]>([]);
   const [page, setPage] = useState<number>(0)
@@ -39,6 +46,7 @@ export default function Datatable<T>({
     }
   })))
   const advancedHeaders = headers.every(header => typeof header !== "string")
+  const advancedFooters = footers && footers.every(header => typeof header !== "string")
 
   if (headers.length !== columns.length) {
     throw new Error("Numero de headers y columnas diferente")
@@ -90,6 +98,53 @@ export default function Datatable<T>({
     return !filter ? true : filter[key] as boolean;
   }
 
+  function formatValue(column: Column<T>, value: T[keyof T]) {
+    if (column.format) {
+      try {
+        if (column.format === "currency") {
+          if (typeof value === "number") {
+            return currencyFormat.format(value as number)
+          } else if (!isNaN(Number(typeof value))) {
+            return currencyFormat.format(Number(value) as number)
+          }
+          return "NaN"
+        } else if (column.format === "decimal") {
+          if (typeof value === "number") {
+            return decimalFormat.format(value as number)
+          } else if (!isNaN(Number(typeof value))) {
+            return decimalFormat.format(Number(value) as number)
+          }
+          return "NaN"
+        } else if (column.format === "percent") {
+          if (typeof value === "number") {
+            return percentFormat.format(value as number)
+          } else if (!isNaN(Number(typeof value))) {
+            return percentFormat.format(Number(value) as number)
+          }
+          return "NaN"
+        } else if (column.format === "unit") {
+          const unitFormat = Intl.NumberFormat("es-MX", { style: "unit", ...column.formatOptions })
+          if (typeof value === "number") {
+            return unitFormat.format(value as number)
+          } else if (!isNaN(Number(typeof value))) {
+            return unitFormat.format(Number(value) as number)
+          }
+          return "NaN"
+        } else if (column.format === "date" || column.format === "datetime") {
+          if (column.format === "date" && value instanceof Date) {
+            return format(value as Date, "P")
+          } else if (column.format === "datetime" && value instanceof Date) {
+            return format(value as Date, "Pp")
+          }
+          return "Invalid Date"
+        }
+        return column.format(value)
+      } catch (error) {
+        return "-"
+      }
+    }
+  }
+
   function renderTd(column: Column<T>, object: T) {
     if (column.renderFn) {
       return column.renderFn(object);
@@ -99,10 +154,19 @@ export default function Datatable<T>({
       return JSON.stringify(object)
     }
     if ((fieldName as string).includes(".")) {
+      if (column.format) {
+        return formatValue(column, getValue(object, fieldName as NestedKey<T>))
+      }
       return getValue(object, fieldName as NestedKey<T>)
     }
     if (typeof object[fieldName as keyof T] === "object") {
+      if (column.format) {
+        return formatValue(column, object[fieldName as keyof T])
+      }
       return JSON.stringify(object[fieldName as keyof T])
+    }
+    if (column.format) {
+      return formatValue(column, object[fieldName as keyof T])
     }
     return object[fieldName as keyof T] as string
   }
@@ -211,17 +275,12 @@ export default function Datatable<T>({
             ) : <>
               {headers.map(headers => (
                 <tr key={v4()}>
-                  {headers.filter(filterColumn).map((header) => (
+                  {headers.filter(filterColumn).map((header, index) => (
                     <>
-                      <th key={v4()} rowSpan={header.rowspan} colSpan={header.colspan}>
+                      <th key={v4()} rowSpan={header.rowspan} colSpan={header.colspan} scope="col" className={`px-6 py-3 ${filters.find((filter) => filter.target === index)?.orderable && "hover:bg-gray-400 dark:hover:bg-gray-600 cursor-pointer"}`} onClick={() => setOrder(index)}>
                         <span className="flex items-center">
                           {header.label}
-                          <svg className="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 19l-4-4" />
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 19l4-4" />
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 5l-4 4" />
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 5l4 4" />
-                          </svg>
+                          {renderOrder(index)}
                         </span>
                       </th>
                     </>
@@ -261,15 +320,44 @@ export default function Datatable<T>({
                 )}
               </>
             )}
-
           </tbody>
+          {footers && footers.length > 0 && (
+            <tfoot className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-600 dark:text-gray-400">
+              {!advancedFooters ? (
+                <tr>
+                  {
+                    footers.filter(filterColumn).map((foot) => (
+                      <th scope="col" className="px-6 py-3" key={v4()}>
+                        <span className="flex items-center">
+                          {foot}
+                        </span>
+                      </th >
+                    ))
+                  }
+                </tr>
+              ) : <>
+                {footers.map(footers => (
+                  <tr key={v4()}>
+                    {footers.filter(filterColumn).map((foot) => (
+                      <>
+                        <th key={v4()} rowSpan={foot.rowspan} colSpan={foot.colspan}>
+                          <span className="flex items-center">
+                            {foot.label}
+                          </span>
+                        </th>
+                      </>
+                    ))}
+                  </tr>
+                ))}
+              </>
+              }
+            </tfoot>
+          )}
         </table>
       </div >
       {pagging && (
-        <Pagination onChangeSelectPages={onChangeSelectPages} count={count} lengthMenu={lengthMenu} page={page} setPage={setPage} records={records} />
-      )
-      }
-
+        <Pagination onChangeSelectPages={onChangeSelectPages} info={info} count={count} lengthMenu={lengthMenu} page={page} setPage={setPage} records={records} />
+      )}
     </>
   )
 }

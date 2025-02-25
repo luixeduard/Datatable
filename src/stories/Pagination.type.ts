@@ -6,5 +6,6 @@ export type PagginationType = {
   setPage: React.Dispatch<React.SetStateAction<number>>;
   records: number;
   count?: number;
-  onChangeSelectPages: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  onChangeSelectPages: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  info?: boolean
 }

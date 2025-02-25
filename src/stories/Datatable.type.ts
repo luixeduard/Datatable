@@ -1,10 +1,13 @@
+import { FormatOptions } from "date-fns";
+
 export type Column<T = any> = {
   fieldName: NestedKey<T> | keyof T | null;
   orderValue?: NestedKey<T> | keyof T | null;
   renderFn?: <K = {}>(
     data: T | keyof T,
   ) => K;
-  format?: 'currency' | 'date' | ((data: T | keyof T) => string),
+  format?: 'currency' | 'decimal' | 'percent' | 'unit' | 'date' | 'datetime' | ((data: T[keyof T]) => string),
+  formatOptions?: Intl.NumberFormatOptions | FormatOptions,
 }
 
 export type NestedKey<T> = T extends object
@@ -64,6 +67,7 @@ export type DatatableType<T = any> = (| {
   data?: never
 }) & {
   headers: string[] | Headers[][];
+  footers?: string[] | Headers[][];
   columns: Column<T>[];
   columnDef?: ColumnDef[];
   control?: 'back' | 'front';

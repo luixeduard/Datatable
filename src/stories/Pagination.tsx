@@ -2,7 +2,7 @@ import { v4 } from "uuid";
 import { PagginationType } from "./Pagination.type";
 import { useEffect, useState } from "react";
 
-export default function Pagination({ count, page, setPage, records, lengthMenu, onChangeSelectPages }: PagginationType) {
+export default function Pagination({ count, page, setPage, records, lengthMenu, onChangeSelectPages, info }: PagginationType) {
   const [Buttons, setButtons] = useState<(number | 'first' | 'last' | 'next' | 'before')[]>([])
 
   useEffect(() => {
@@ -88,7 +88,9 @@ export default function Pagination({ count, page, setPage, records, lengthMenu, 
           ))}
         </select>
       </div>
-      <span className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Mostrando <span className="font-semibold text-gray-900 dark:text-white">{(page * records) + 1} - {count ? ((page + 1) * records) > count ? count : (page + 1) * records : '?'}</span> de <span className="font-semibold text-gray-900 dark:text-white">{count}</span></span>
+      {info && (
+        <span className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Mostrando <span className="font-semibold text-gray-900 dark:text-white">{(page * records) + 1} - {count ? ((page + 1) * records) > count ? count : (page + 1) * records : '?'}</span> de <span className="font-semibold text-gray-900 dark:text-white">{count}</span></span>
+      )}
       <nav aria-label="Pagination Datatable">
         <ul className="flex items-center -space-x-px h-8 text-sm">
           {Buttons.map((valuePagging, index) => (
