@@ -216,7 +216,7 @@ export default function Datatable<T>({
     setOrderCol((current) => {
       if (!multiple_order) {
         if (current.length === 0) {
-          current.push([0, "ASC"])
+          current.push([-1, "ASC"])
         }
         if (current[0][0] !== index) {
           return [[index, "ASC"]]
