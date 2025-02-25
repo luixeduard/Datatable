@@ -35,6 +35,7 @@ export default function Datatable<T>({
   info = true
 }: DatatableType<T>) {
   const [allData, setAllData] = setStateAllData(data)
+  const [originalData, setOriginalData] = useState<T[]>([]);
   const [currentData, setCurrentData] = useState<T[]>([]);
   const [page, setPage] = useState<number>(0)
   const [search, setSearch] = useState<string>()
@@ -313,8 +314,9 @@ export default function Datatable<T>({
   }, [allData, orderCol])
 
   useEffect(() => {
-    console.log(data)
-  }, [allData])
+    const start = page * records
+    setCurrentData(allData.slice(start === 0 ? start : start + 1, start + records))
+  }, [allData, page, records])
 
   /* function sliceData() {
     if (orderCol) {
