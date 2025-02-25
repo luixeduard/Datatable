@@ -53,12 +53,12 @@ export default function Datatable<T>({
   }
 
   useEffect(() => {
+    if (control === "front") {
+      return
+    }
     if (refresh) { //Si se refresca la pagina se establece fresh en false
       setRefresh(false)
     } else { //Si el refresh esta en false se retorna
-      return
-    }
-    if (control === "front") {
       return
     }
     if (!getData) {//Si el getData no esta definido dar error
