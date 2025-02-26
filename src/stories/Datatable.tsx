@@ -4,6 +4,12 @@ import Pagination from "./Pagination";
 import { v4 } from "uuid";
 import { format, FormatOptions } from "date-fns";
 
+/**
+ * @author @luixeduard
+ * @version 2.0.0
+ * @name Datatable
+ */
+
 const currencyFormat = Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" })
 const decimalFormat = Intl.NumberFormat("es-MX", { style: "decimal" })
 const percentFormat = Intl.NumberFormat("es-MX", { style: "percent" })
