@@ -5,7 +5,7 @@ import { v4 } from "uuid";
 import { format, FormatOptions } from "date-fns";
 
 /**
- * @author @luixeduard
+ * @author Luis Salas @luixeduard
  * @version 2.0.0
  * @name Datatable
  */
