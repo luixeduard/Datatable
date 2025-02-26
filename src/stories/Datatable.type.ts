@@ -6,9 +6,11 @@ export type Column<T = any> = {
   renderFn?: <K = {}>(
     data: T | keyof T,
   ) => K;
-  format?: 'currency' | 'decimal' | 'percent' | 'unit' | 'date' | 'datetime' | ((data: T[keyof T]) => string),
+  format?: FormatType<T>,
   formatOptions?: Intl.NumberFormatOptions | FormatOptions,
 }
+
+export type FormatType<T> = 'currency' | 'decimal' | 'percent' | 'unit' | 'date' | 'datetime' | ((data: T[keyof T]) => string)
 
 export type NestedKey<T> = T extends object
   ? {

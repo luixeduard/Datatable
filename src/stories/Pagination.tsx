@@ -43,7 +43,7 @@ export default function Pagination({ count, page, setPage, records, lengthMenu, 
         <div onClick={() => setPage((value) => value - 1)} className={`flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 ${index === 0 && 'rounded-s-lg'} hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}>
           <span className="sr-only">Anterior</span>
           <svg className="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 1 1 5l4 4" />
           </svg>
         </div>
       )
@@ -52,8 +52,8 @@ export default function Pagination({ count, page, setPage, records, lengthMenu, 
         <div onClick={() => setPage(0)} className={`flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 ${index === 0 && 'rounded-s-lg'} hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}>
           <span className="sr-only">Primera pagina</span>
           <svg className="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 10">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 1 1 5l2 4" />
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 1 5 5l2 4" />
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 1 1 5l2 4" />
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 1 5 5l2 4" />
           </svg>
         </div>
       )
@@ -62,7 +62,7 @@ export default function Pagination({ count, page, setPage, records, lengthMenu, 
         <div onClick={() => setPage((value) => value + 1)} className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 ${index === Buttons.length - 1 && 'rounded-e-lg'} hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}>
           <span className="sr-only">Siguiente</span>
           <svg className="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
           </svg>
         </div>
       )
@@ -71,8 +71,8 @@ export default function Pagination({ count, page, setPage, records, lengthMenu, 
       <div onClick={() => setPage(count ? Math.ceil(count / records) - 1 : 0)} className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 ${index === Buttons.length - 1 && 'rounded-e-lg'} hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}>
         <span className="sr-only">Ultima pagina</span>
         <svg className="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 10">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1 3 5l-2 4" />
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 7 5l-2 4" />
+          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1 3 5l-2 4" />
+          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 1 7 5l-2 4" />
         </svg>
       </div>
     )
@@ -89,7 +89,7 @@ export default function Pagination({ count, page, setPage, records, lengthMenu, 
         </select>
       </div>
       {info && (
-        <span className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Mostrando <span className="font-semibold text-gray-900 dark:text-white">{(page * records) + 1} - {count ? ((page + 1) * records) > count ? count : (page + 1) * records : '?'}</span> de <span className="font-semibold text-gray-900 dark:text-white">{count}</span></span>
+        <span className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Mostrando <span className="font-semibold text-gray-900 dark:text-white">{(page * records) + 1} - {count ? ((page + 1) * records) > count ? count : (page + 1) * records : count === 0 ? 0 : '?'}</span> de <span className="font-semibold text-gray-900 dark:text-white">{count}</span></span>
       )}
       <nav aria-label="Pagination Datatable">
         <ul className="flex items-center -space-x-px h-8 text-sm">

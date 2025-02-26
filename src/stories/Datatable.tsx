@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Column, ColumnDef, DatatableType, Headers, NestedKey } from "./Datatable.type";
+import { Column, ColumnDef, DatatableType, FormatType, Headers, NestedKey } from "./Datatable.type";
 import Pagination from "./Pagination";
 import { v4 } from "uuid";
-import { format } from "date-fns";
+import { format, FormatOptions } from "date-fns";
 
 const currencyFormat = Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" })
 const decimalFormat = Intl.NumberFormat("es-MX", { style: "decimal" })
@@ -35,7 +35,7 @@ export default function Datatable<T>({
   info = true
 }: DatatableType<T>) {
   const [allData, setAllData] = setStateAllData(data)
-  const [originalData, setOriginalData] = useState<T[]>([]);
+  const [filteredData, setFilteredData] = useState<{ is_filtered: boolean, indexes: number[] }>({ is_filtered: false, indexes: [] });
   const [currentData, setCurrentData] = useState<T[]>([]);
   const [page, setPage] = useState<number>(0)
   const [search, setSearch] = useState<string>()
@@ -43,6 +43,7 @@ export default function Datatable<T>({
   const [count, setCount] = useState<number | undefined>()
   const [refresh, setRefresh] = !stateRefresh ? useState<boolean>(false) : stateRefresh
   const [orderCol, setOrderCol] = useState<[number, -1 | "ASC" | "DESC" | 1][]>(order.map(ord => Array.isArray(ord) ? ord : [ord.idx, ord.order]))
+  const [changedOrder, setChangedOrder] = useState(false)
   const [loading, setLoading] = useState(false)
   const filters = ((new Array(headers.length).fill(null).map((_c, index) => {
     const visible = !columnDef ? true : getValueColumnDef(index, "visible")
@@ -164,6 +165,10 @@ export default function Datatable<T>({
         return "-"
       }
     }
+    if (["string", "number", "bigint", "boolean", "undefined"].includes(typeof value)) {
+      return value
+    }
+    return JSON.stringify(value)
   }
 
   function renderTd(column: Column<T>, object: T) {
@@ -252,13 +257,13 @@ export default function Datatable<T>({
       <svg className="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
         {!(find && order) ? (<></>) : order === "ASC" ? (
           <>
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 5l-4 4" />
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 5l4 4" />
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M12 5l-4 4" />
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M12 5l4 4" />
           </>
         ) : (
           <>
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 19l-4-4" />
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M12 19l4-4" />
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M12 19l-4-4" />
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M12 19l4-4" />
           </>
         )}
       </svg>
@@ -308,31 +313,81 @@ export default function Datatable<T>({
     if (control === "back") {
       return
     }
-    if (allData) {
-      setAllData((curr) => sortDataMultilevelMulticols(curr))
-    }
+    setAllData((curr) => sortDataMultilevelMulticols(curr))
+    setChangedOrder(true)
   }, [allData, orderCol])
 
-  useEffect(() => {
-    const start = page * records
-    setCurrentData(allData.slice(start === 0 ? start : start + 1, start + records))
-  }, [allData, page, records])
+  function limpiarString(input?: string): string | undefined {
+    if (!input) return
+    // Eliminar espacios al inicio y al final
+    let str = input.trim();
 
-  /* function sliceData() {
-    if (orderCol) {
-      if (!multiple_order) {
-        setAllData((current) => {
-          if (!multiple_order) {
-            
-          }
-        })
+    // Eliminar espacios dobles
+    str = str.replace(/\s+/g, ' ');
+
+    // Eliminar acentos excepto la "ñ"
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, (char) => {
+      // Mantener la "ñ" y "Ñ"
+      if (char === '\u0303' && /[nN]/.test(str[str.indexOf(char) - 1])) {
+        return '';
       }
-      
+      return '';
+    });
+  }
+
+  function filterData(data: T[], keys: { key: keyof T | NestedKey<T>, format?: FormatType<T>, formatOptions?: Intl.NumberFormatOptions | FormatOptions }[], searchString: string) {
+    return data
+      .map((obj, index) => {
+        // Obtener y concatenar los valores de las claves dadas
+        const concatenatedValues = keys
+          .map(({ key, ...col }) => `${(key as string).includes('.') ? (formatValue(col as Column<T>, getValue(obj, key as NestedKey<T>, ""))) : formatValue(col as Column<T>, obj[key as keyof T])}`.toLowerCase())
+          .join(" ");
+        console.log(concatenatedValues)
+
+        // Si la cadena de búsqueda está en el string concatenado, guardar el índice
+        return concatenatedValues.includes(searchString.toLowerCase()) ? index : -1;
+      })
+      .filter(index => index !== -1); // Eliminar los -1 (que indican no coincidencias)
+  }
+
+  useEffect(() => {
+    if (control === "back") {
+      return
+    } const cleaned_search = limpiarString(search);
+    if (!cleaned_search) {
+      setFilteredData({ indexes: [], is_filtered: false })
+      return
     }
-    if (!search) {
-      
+    const keys = columns.map(col => ({ key: col.fieldName || col.orderValue, format: col.format, formatOptions: col.formatOptions }))
+      .filter((_k, index) => filters.find(f => f.target === index && f.searchable && f.visible))
+      .filter(col => col.key != null) as { key: keyof T | NestedKey<T>, format?: FormatType<T>, formatOptions?: Intl.NumberFormatOptions | FormatOptions }[]
+    setFilteredData({ indexes: filterData(allData, keys, cleaned_search), is_filtered: true })
+  }, [allData, search])
+
+  function getFilteredData(allData: T[], filteredData: { is_filtered: boolean; indexes: number[]; }) {
+    if (!filteredData.is_filtered) {
+      setCount(allData.length)
+      return allData
     }
-  } */
+    if (filteredData.indexes.length === 0) {
+      setCount(0)
+      return []
+    }
+    const filter = allData.filter((_v, index) => filteredData.indexes.includes(index))
+    setCount(filter.length)
+    return filter
+  }
+
+  useEffect(() => {
+    if (control === "back") {
+      return
+    }
+    if (changedOrder) {
+      setChangedOrder(false)
+    }
+    const start = page * records
+    setCurrentData(getFilteredData(allData, filteredData).slice(start === 0 ? start : start + 1, start + records))
+  }, [allData, filteredData, page, records, changedOrder])
 
   return (
     <>
@@ -342,7 +397,7 @@ export default function Datatable<T>({
           <div className="relative mt-1">
             <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
               <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
               </svg>
             </div>
             <input type="text" onInput={({ currentTarget }) => setSearch(currentTarget.value)} id="table-search" className="block py-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar..." />
