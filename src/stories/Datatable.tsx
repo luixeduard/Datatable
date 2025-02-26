@@ -342,7 +342,6 @@ export default function Datatable<T>({
         const concatenatedValues = keys
           .map(({ key, ...col }) => `${(key as string).includes('.') ? (formatValue(col as Column<T>, getValue(obj, key as NestedKey<T>, ""))) : formatValue(col as Column<T>, obj[key as keyof T])}`.toLowerCase())
           .join(" ");
-        console.log(concatenatedValues)
 
         // Si la cadena de búsqueda está en el string concatenado, guardar el índice
         return concatenatedValues.includes(searchString.toLowerCase()) ? index : -1;
