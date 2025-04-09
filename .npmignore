@@ -1,0 +1,17 @@
+# .npmignore
+
+src/
+.storybook/
+node_modules/
+rollup.config.js
+tsconfig.json
+babel.config.js
+tailwind.config.js
+postcss.config.js
+.vscode/
+*.map
+*.log
+*.ts
+*.tsx
+*.jsx
+*.md

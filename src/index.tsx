@@ -3,6 +3,7 @@ import { Column, ColumnDef, DatatableType, FormatType, Headers, NestedKey } from
 import Pagination from "./Pagination";
 import { v4 } from "uuid";
 import { format, FormatOptions } from "date-fns";
+import './index.css';
 
 /**
  * @author Luis Salas @luixeduard

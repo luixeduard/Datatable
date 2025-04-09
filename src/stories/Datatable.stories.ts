@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Datatable from './Datatable';
+import Datatable from '..';
 import axios from "axios"
 import { es } from "date-fns/locale"
 
