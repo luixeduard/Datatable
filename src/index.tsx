@@ -446,7 +446,7 @@ export default function Datatable<T>({
           </thead >
           <tbody>
             {loading ? (
-              <>
+              <tr>
                 <td colSpan={headers.filter((_header, index) => filters.find(filter => filter.target !== index && !filter.visible)).length}>
                   <div className="text-center my-10">
                     <div role="status">
@@ -458,7 +458,7 @@ export default function Datatable<T>({
                     </div>
                   </div>
                 </td>
-              </>
+              </tr>
             ) : (
               <>
                 {currentData.map(row => (
