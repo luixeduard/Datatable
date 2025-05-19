@@ -3,9 +3,9 @@ import { FormatOptions } from "date-fns";
 export type Column<T = any> = {
   fieldName: NestedKey<T> | keyof T | null;
   orderValue?: NestedKey<T> | keyof T | null;
-  renderFn?: <K = {}>(
-    data: T | keyof T,
-  ) => K;
+  renderFn?: (
+    data: any,
+  ) => any;
   format?: FormatType<T>,
   formatOptions?: Intl.NumberFormatOptions | FormatOptions,
 }
