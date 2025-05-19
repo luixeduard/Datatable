@@ -89,7 +89,7 @@ export default function Pagination({ count, page, setPage, records, lengthMenu, 
         </select>
       </div>
       {info && (
-        <span className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Mostrando <span className="font-semibold text-gray-900 dark:text-white">{(page * records) + 1} - {count ? ((page + 1) * records) > count ? count : (page + 1) * records : count === 0 ? 0 : '?'}</span> de <span className="font-semibold text-gray-900 dark:text-white">{count}</span></span>
+        <span className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto bg-white dark:bg-gray-700 rounded-3xl p-2">Mostrando <span className="font-semibold text-gray-900 dark:text-white">{(page * records) + 1} - {count ? ((page + 1) * records) > count ? count : (page + 1) * records : count === 0 ? 0 : '?'}</span> de <span className="font-semibold text-gray-900 dark:text-white">{count}</span></span>
       )}
       <nav aria-label="Pagination Datatable">
         <ul className="flex items-center -space-x-px h-8 text-sm">

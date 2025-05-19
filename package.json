@@ -1,7 +1,7 @@
 {
   "name": "@luix_eduard/datatable",
   "private": false,
-  "version": "2.0.7",
+  "version": "2.0.12",
   "type": "module",
   "description": "Datatable v2",
   "author": "luix_eduard",

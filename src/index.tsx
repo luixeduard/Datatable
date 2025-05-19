@@ -461,6 +461,13 @@ export default function Datatable<T>({
               </tr>
             ) : (
               <>
+                {currentData.length === 0 && (
+                  <>
+                    <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 even:hover:bg-gray-100 even:dark:hover:bg-gray-700">
+                      <td colSpan={headers.filter((_header, index) => filters.find(filter => filter.target !== index && !filter.visible)).length} className={`p-3 text-center font-bold`}>SIN DATOS</td>
+                    </tr>
+                  </>
+                )}
                 {currentData.map(row => (
                   <tr key={v4()} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 even:hover:bg-gray-100 even:dark:hover:bg-gray-700">
                     <>
