@@ -29,6 +29,7 @@ export default function Datatable<T>({
   headers,
   footers,
   columnDef,
+  rowDef,
   control,
   data,
   getData,
@@ -104,13 +105,11 @@ export default function Datatable<T>({
         setCount(data[0].length)
       }
     }
-
   }, [refresh])
 
   function onChangeSelectPages(event: React.ChangeEvent<HTMLSelectElement>) {
     setPage(0)
     setRecords(Number(event.currentTarget.value))
-    setRefresh(true)
   }
 
   function getValue<T, K extends NestedKey<T>>(object: T, key: K, defaultValue: unknown = "-"): unknown {
@@ -417,7 +416,14 @@ export default function Datatable<T>({
               <tr>
                 {
                   headers.filter(filterColumn).map((head, index) => (
-                    <th scope="col" className={`px-6 py-3 ${filters.find((filter) => filter.target === index)?.orderable && "hover:bg-gray-400 dark:hover:bg-gray-600 cursor-pointer"}`} onClick={() => setOrder(index)} key={v4()}>
+                    <th
+                      scope="col"
+                      className={`px-6 py-3 ${filters.find((filter) => filter.target === index)?.orderable && "hover:bg-gray-400 dark:hover:bg-gray-600 cursor-pointer"}`}
+                      {...(filters.find((filter) => filter.target === index)?.orderable && {
+                        onClick: () => setOrder(index),
+                      })}
+                      key={v4()}
+                    >
                       <span className="flex items-center">
                         {head}
                         {renderOrder(index)}
@@ -469,7 +475,7 @@ export default function Datatable<T>({
                   </>
                 )}
                 {currentData.map(row => (
-                  <tr key={v4()} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 even:hover:bg-gray-100 even:dark:hover:bg-gray-700">
+                  <tr onDoubleClick={(evt) => rowDef?.onDoubleClick(evt, row)} onClick={(evt) => rowDef?.onClick(evt, row)} key={v4()} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 even:hover:bg-gray-100 even:dark:hover:bg-gray-700">
                     <>
                       {columns
                         .filter(filterColumn)

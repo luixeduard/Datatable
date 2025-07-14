@@ -39,6 +39,13 @@ export type ColumnDef = (
   orderable?: boolean
 }
 
+export type onClickEvent<T> = (evt: React.MouseEvent<HTMLTableRowElement, MouseEvent>, data: T) => void
+
+export type RowDef<T = any> = {
+  onClick: onClickEvent<T>,
+  onDoubleClick: onClickEvent<T>
+}
+
 export type LengthMenu = {
   label: string;
   value: number;
@@ -70,6 +77,7 @@ type CommonDatatableProps<T> = {
   footers?: string[] | Headers[][];
   columns: Column<T>[];
   columnDef?: ColumnDef[];
+  rowDef?: RowDef<T>;
   pagging?: boolean;
   info?: boolean;
   searching?: boolean;
