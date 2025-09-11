@@ -215,9 +215,7 @@ export default function Datatable<T>({
   }, [records, page])
 
   useEffect(() => {
-    if (search) {
-      setRefresh(true)
-    }
+    setRefresh(true)
   }, [search])
 
   useEffect(() => {
@@ -453,7 +451,7 @@ export default function Datatable<T>({
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={headers.filter((_header, index) => filters.find(filter => filter.target !== index && !filter.visible)).length}>
+                <td colSpan={headers.filter((_header, index) => !filters.find(filter => filter.target !== index && !filter.visible)).length}>
                   <div className="text-center my-10">
                     <div role="status">
                       <svg aria-hidden="true" className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
