@@ -1,7 +1,7 @@
 {
   "name": "@luix_eduard/datatable",
   "private": false,
-  "version": "2.0.14",
+  "version": "2.0.15",
   "type": "module",
   "description": "Datatable v2",
   "author": "luix_eduard",
@@ -16,17 +16,35 @@
   "scripts": {
     "dev": "vite",
     "build": "rollup -c",
+    "prepublishOnly": "npm run build",
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "prepare": "husky"
   },
   "peerDependencies": {
+    "@reduxjs/toolkit": ">=2.0.0",
     "date-fns": ">=4.1.0",
     "react": ">=19.0.0",
     "react-dom": ">=19.0.0",
+    "react-redux": ">=9.0.0",
     "tailwindcss": ">=4.0.7",
-    "uuid": ">=11.0.5"
+    "uuid": ">=11.1.1"
+  },
+  "peerDependenciesMeta": {
+    "@reduxjs/toolkit": {
+      "optional": true
+    },
+    "react-redux": {
+      "optional": true
+    }
+  },
+  "overrides": {
+    "postcss-selector-parser": "^7.1.6",
+    "@storybook/addon-actions": {
+      "uuid": "^11.1.1"
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.26.10",
@@ -34,6 +52,7 @@
     "@babel/preset-typescript": "^7.27.0",
     "@chromatic-com/storybook": "^3.2.4",
     "@eslint/js": "^9.19.0",
+    "@reduxjs/toolkit": "^2.13.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.1",
@@ -59,8 +78,10 @@
     "eslint-plugin-react-refresh": "^0.4.18",
     "eslint-plugin-storybook": "^0.11.2",
     "globals": "^15.14.0",
+    "husky": "^9.1.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-redux": "^9.3.0",
     "rollup-plugin-dts": "^6.2.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
