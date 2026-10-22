@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# Asegurar node/npm en PATH para terminales y clientes GUI en macOS
+if [ -d "$HOME/.nvm/versions/node" ]; then
+  LATEST_NODE_DIR=$(ls -d "$HOME/.nvm/versions/node/"* 2>/dev/null | tail -n 1)
+  if [ -n "$LATEST_NODE_DIR" ]; then
+    export PATH="$LATEST_NODE_DIR/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
+  fi
+fi
+
+# Omitir incremento durante merge, rebase o cherry-pick
+if [ -f .git/MERGE_HEAD ] || [ -f .git/CHERRY_PICK_HEAD ] || [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
+  exit 0
+fi
+
+# Verificar si el commit ya incluye un cambio manual de versión
+HEAD_VERSION=$(git show HEAD:package.json 2>/dev/null | node -p "try { JSON.parse(require('fs').readFileSync(0, 'utf-8')).version } catch(e) { '' }" 2>/dev/null || true)
+CURRENT_VERSION=$(node -p "try { require('./package.json').version } catch(e) { '' }" 2>/dev/null || true)
+
+if [ -n "$HEAD_VERSION" ] && [ -n "$CURRENT_VERSION" ] && [ "$HEAD_VERSION" != "$CURRENT_VERSION" ]; then
+  echo "Husky pre-commit: Versión manual detectada ($CURRENT_VERSION)."
+  git add package.json package-lock.json 2>/dev/null || true
+  exit 0
+fi
+
+# Incrementar versión de parche
+NEW_VERSION=$(npm version patch --no-git-tag-version)
+echo "Husky pre-commit: Versión incrementada a $NEW_VERSION"
+
+# Añadir package.json y package-lock.json al commit actual
+git add package.json package-lock.json

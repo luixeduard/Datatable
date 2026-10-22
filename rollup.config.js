@@ -10,7 +10,7 @@ const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 export default [{
   input: 'src/index.tsx',
   output: [
-    { file: 'dist/index.js', format: 'cjs', sourcemap: true },
+    { file: 'dist/index.js', format: 'cjs', sourcemap: true, exports: 'named' },
     { file: 'dist/index.esm.js', format: 'esm', sourcemap: true }
   ],
   plugins: [
@@ -32,7 +32,7 @@ export default [{
       ]
     })
   ],
-  external: ['react', 'react-dom'],
+  external: ['react', 'react-dom', '@reduxjs/toolkit', 'react-redux'],
 },
 {
   input: 'src/index.tsx',

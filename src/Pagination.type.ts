@@ -1,4 +1,5 @@
-import { LengthMenu } from "./Datatable.type"
+import type React from "react";
+import type { LengthMenu } from "./Datatable.type";
 
 export type PagginationType = {
   lengthMenu: (number | LengthMenu)[];
@@ -7,5 +8,5 @@ export type PagginationType = {
   records: number;
   count?: number;
   onChangeSelectPages: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  info?: boolean
-}
+  info?: boolean;
+};

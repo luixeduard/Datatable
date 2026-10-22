@@ -1,31 +1,46 @@
-import { FormatOptions } from "date-fns";
+import type React from "react";
+import type { FormatOptions } from "date-fns";
 
-export type Column<T = any> = {
-  fieldName: NestedKey<T> | keyof T | null;
+export type Column<T = unknown> = {
+  fieldName?: NestedKey<T> | keyof T | null;
   orderValue?: NestedKey<T> | keyof T | null;
   renderFn?: (
-    data: any,
-  ) => any;
-  format?: FormatType<T>,
-  formatOptions?: Intl.NumberFormatOptions | FormatOptions,
-}
+    data: T,
+    row?: T,
+  ) => React.ReactNode;
+  format?: FormatType<T>;
+  formatOptions?: Intl.NumberFormatOptions | FormatOptions;
+};
 
-export type FormatType<T> = 'currency' | 'decimal' | 'percent' | 'unit' | 'date' | 'datetime' | ((data: T[keyof T]) => string)
+export type FormatType<T = unknown> =
+  | 'currency'
+  | 'decimal'
+  | 'percent'
+  | 'unit'
+  | 'date'
+  | 'datetime'
+  | ((data: T extends object ? T[keyof T] : unknown) => string);
 
-export type NestedKey<T> = T extends object
+type PrevDepth = [never, 0, 1, 2, 3];
+
+type AnyFunction = (...args: unknown[]) => unknown;
+
+export type NestedKey<T, Depth extends number = 3> = [Depth] extends [0]
+  ? never
+  : T extends Date | AnyFunction | unknown[] | RegExp | Map<unknown, unknown> | Set<unknown>
+  ? never
+  : T extends object
   ? {
-    [K in keyof T]: K extends string
-    ? `${K}` | `${K}.${NestedKey<T[K]>}`
-    : never;
-  }[keyof T]
+      [K in keyof T & string]: `${K}` | `${K}.${NestedKey<T[K], PrevDepth[Depth]>}`;
+    }[keyof T & string]
   : never;
 
-export type Data<T = any> = {
+export type Data<T = unknown> = {
   rows: T[];
   page: number;
   records: number;
   count: number;
-}
+};
 
 type ClassNameType = React.HTMLAttributes<HTMLElement>["className"];
 
@@ -36,41 +51,44 @@ export type ColumnDef = (
   visible?: boolean;
   searchable?: boolean;
   classname?: ClassNameType;
-  orderable?: boolean
-}
+  orderable?: boolean;
+};
 
-export type onClickEvent<T> = (evt: React.MouseEvent<HTMLTableRowElement, MouseEvent>, data: T) => void
+export type onClickEvent<T = unknown> = (
+  evt: React.MouseEvent<HTMLTableRowElement | HTMLDivElement>,
+  data: T
+) => void;
 
-export type RowDef<T = any> = {
-  onClick: onClickEvent<T>,
-  onDoubleClick: onClickEvent<T>
-}
+export type RowDef<T = unknown> = {
+  onClick?: onClickEvent<T>;
+  onDoubleClick?: onClickEvent<T>;
+};
 
 export type LengthMenu = {
   label: string;
   value: number;
-}
+};
 
 export type OrderTable = {
-  idx: number,
+  idx: number;
   order: 'ASC' | 'DESC' | 1 | -1;
-}
+};
 
-export type GetData<T> = (
+export type GetData<T = unknown> = (
   page: number,
   records: number,
   rows: string[],
   orderValue: [number, 'ASC' | 'DESC' | 1 | -1][],
   search?: string
-) => Promise<Data<T>>
+) => Promise<Data<T>>;
 
-export type GetVoidData<T> = () => Promise<Data<T>>
+export type GetVoidData<T = unknown> = () => Promise<Data<T>>;
 
 export type Headers = {
   label: string;
   rowspan: number;
   colspan: number;
-}
+};
 
 type CommonDatatableProps<T> = {
   headers: string[] | Headers[][];
@@ -85,23 +103,32 @@ type CommonDatatableProps<T> = {
   lengthMenu?: (number | LengthMenu)[];
   order?: ([number, 'ASC' | 'DESC' | 1 | -1] | OrderTable)[];
   multiple_order?: boolean;
-  stateRefresh?: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
+  stateRefresh?: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+  cardsRender?: boolean | 'auto';
+  cardsClassName?: string;
+  cardsPerRow?: number;
+  tableId?: string;
+  store?: unknown;
+  restoreScroll?: boolean;
 };
 
 type BackControlDatatable<T> = CommonDatatableProps<T> & {
   control: 'back';
   getData: GetData<T>;
-  data?: never; // Asegura que `data` no esté presente
+  data?: never;
 };
 
 type FrontControlDatatable<T> = CommonDatatableProps<T> & {
   control: 'front';
-} & ({
-  data: [T[], React.Dispatch<React.SetStateAction<T[]>>] | [T[]];
-  getData?: never; // Asegura que `getData` no esté presente
-} | {
-  getData: GetVoidData<T>;
-  data?: never
-});
+} & (
+  | {
+      data: [T[], React.Dispatch<React.SetStateAction<T[]>>] | [T[]] | T[];
+      getData?: never;
+    }
+  | {
+      getData: GetVoidData<T>;
+      data?: never;
+    }
+);
 
-export type DatatableType<T = any> = BackControlDatatable<T> | FrontControlDatatable<T>;
+export type DatatableType<T = unknown> = BackControlDatatable<T> | FrontControlDatatable<T>;

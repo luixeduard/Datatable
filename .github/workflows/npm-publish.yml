@@ -1,0 +1,64 @@
+name: Node.js Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+        id: npm_install
+        continue-on-error: true
+      - run: npm publish --access=public
+        id: run_npm_publish
+        continue-on-error: true
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+      - name: Discord notification (error)
+        if: steps.npm_install.outcome == 'failure' || steps.run_npm_publish.outcome == 'failure'
+        uses: Ilshidur/action-discord@master
+        env:
+            DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+            DISCORD_EMBEDS: |
+                [
+                  {
+                    "title": "Error en la publicación de paquete",
+                    "description": "El repositorio ${{ github.repository }} tuvo un error al subir el paquete a npm.",
+                    "color": 16711680,
+                    "fields": [
+                      { "name": "Acción", "value": ${{ toJson(github.event.head_commit.message) }}, "inline": true },
+                      { "name": "Rama", "value": "${{ github.ref_name }}", "inline": true },
+                      { "name": "Ejecutado por","value": "${{ github.actor }}", "inline": true }
+                    ],
+                    "timestamp": "${{ github.event.repository.updated_at }}"
+                  }
+                ]
+
+      # Notificación a Discord en caso de éxito
+      - name: Discord notification (success)
+        if: steps.npm_install.outcome == 'success' && steps.run_npm_publish.outcome == 'success'
+        uses: Ilshidur/action-discord@master
+        env:
+            DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+            DISCORD_EMBEDS: |
+                [
+                  {
+                    "title": "Publicación del paquete exitoso",
+                    "description": "El repositorio ${{ github.repository }} ha sido publicado exitosamente.",
+                    "color": 65280,
+                    "fields": [
+                      { "name": "Acción", "value": ${{ toJson(github.event.head_commit.message) }}, "inline": true },
+                      { "name": "Rama", "value": "${{ github.ref_name }}", "inline": true },
+                      { "name": "Ejecutado por","value": "${{ github.actor }}", "inline": true }
+                    ],
+                    "timestamp": "${{ github.event.repository.updated_at }}"
+                  }
+                ]
