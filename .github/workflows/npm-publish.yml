@@ -23,8 +23,9 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
       - name: Discord notification (error)
-        if: steps.npm_install.outcome == 'failure' || steps.run_npm_publish.outcome == 'failure'
+        if: (steps.npm_install.outcome == 'failure' || steps.run_npm_publish.outcome == 'failure') && secrets.DISCORD_WEBHOOK != ''
         uses: Ilshidur/action-discord@master
+        continue-on-error: true
         env:
             DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
             DISCORD_EMBEDS: |
@@ -44,8 +45,9 @@ jobs:
 
       # Notificación a Discord en caso de éxito
       - name: Discord notification (success)
-        if: steps.npm_install.outcome == 'success' && steps.run_npm_publish.outcome == 'success'
+        if: steps.npm_install.outcome == 'success' && steps.run_npm_publish.outcome == 'success' && secrets.DISCORD_WEBHOOK != ''
         uses: Ilshidur/action-discord@master
+        continue-on-error: true
         env:
             DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
             DISCORD_EMBEDS: |
@@ -62,3 +64,7 @@ jobs:
                     "timestamp": "${{ github.event.repository.updated_at }}"
                   }
                 ]
+
+      - name: Verify publish outcome
+        if: steps.npm_install.outcome == 'failure' || steps.run_npm_publish.outcome == 'failure'
+        run: exit 1
