@@ -1,91 +1,6 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
-/* =========================
-   DARK THEME GLOBAL & STORYBOOK
-   ========================= */
-
-:root {
-    color-scheme: light;
-}
-
-html.dark,
-body.dark,
-.dark {
-    color-scheme: dark;
-}
-
-html.dark,
-body.dark {
-    background-color: #0b0f19;
-    color: #f8fafc;
-}
-
-/* Fondo oscuro en Storybook canvas, iframe y Docs cuando dark está activo */
-html.dark #storybook-root,
-html.dark .sb-show-main,
-html.dark .docs-story,
-html.dark .sbdocs,
-html.dark .sbdocs-wrapper,
-html.dark .sbdocs-content,
-html.dark .innerZoomElementWrapper {
-    background-color: #0b0f19 !important;
-    color: #f8fafc !important;
-}
-
-/* En Storybook Docs: contenedor de la historia (canvas) */
-html.dark .docs-story {
-    background-color: #0b0f19 !important;
-    border-color: #1e293b !important;
-}
-
-html.dark .docs-story > div {
-    background-color: transparent !important;
-}
-
-/* Barra de herramientas y zoom en Storybook Docs */
-html.dark .docs-story button,
-html.dark .docs-story a {
-    color: #94a3b8 !important;
-}
-
-html.dark .docs-story button:hover,
-html.dark .docs-story a:hover {
-    color: #f8fafc !important;
-}
-
-/* Títulos y textos de Storybook Docs en modo oscuro */
-html.dark .sbdocs h1,
-html.dark .sbdocs h2,
-html.dark .sbdocs h3,
-html.dark .sbdocs h4 {
-    color: #f8fafc !important;
-}
-
-html.dark .sbdocs p,
-html.dark .sbdocs li,
-html.dark .sbdocs td,
-html.dark .sbdocs th {
-    color: #cbd5e1 !important;
-}
-
-html.dark .sbdocs pre,
-html.dark .sbdocs code {
-    background-color: #1e293b !important;
-    color: #e2e8f0 !important;
-    border-color: #334155 !important;
-}
-
-html.dark .sbdocs-content table,
-html.dark .docblock-argstable {
-    background-color: #0f172a !important;
-    color: #cbd5e1 !important;
-}
-
-html.dark .docblock-argstable-head th {
-    color: #94a3b8 !important;
-}
+@custom-variant dark (&:where(.dark, .dark *, [data-theme='dark'], [data-theme='dark'] *));
 
 /* =========================
    FLUID ROW & CARD TRANSITIONS
@@ -136,7 +51,7 @@ html.dark .docblock-argstable-head th {
 
 @media (prefers-reduced-motion: reduce) {
     .datatable-row-animated,
-    .generic-card,
+    .datatable-card,
     .datatable-fade-enter {
         animation: none !important;
         opacity: 1 !important;
@@ -145,19 +60,42 @@ html.dark .docblock-argstable-head th {
 }
 
 /* =========================
-   BASE CARD TABLE
+   BASE CARD TABLE (PREFIJO DATATABLE-)
    ========================= */
 
-.generic-cards-grid {
+.datatable-cards-grid {
     --cards-per-row: 1;
+    --datatable-cards-per-row: var(--cards-per-row, 1);
 
     display: grid;
-    grid-template-columns: repeat(var(--cards-per-row, 1), minmax(0, 1fr));
+    grid-template-columns: repeat(var(--datatable-cards-per-row, var(--cards-per-row, 1)), minmax(0, 1fr));
     gap: 1.25rem;
     width: 100%;
 }
 
-.generic-card {
+/* =========================
+   ELEMENTOS DE CONTROL Y PAGINACIÓN RESILIENTES
+   ========================= */
+
+.datatable-pagination-btn {
+    min-width: 2.25rem !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.datatable-pagination-list {
+    flex-shrink: 0 !important;
+}
+
+.datatable-view-toggle {
+    flex-shrink: 0 !important;
+}
+
+.datatable-view-toggle-btn {
+    flex-shrink: 0 !important;
+}
+
+.datatable-card {
     position: relative;
     width: 100%;
     min-width: 0;
@@ -174,25 +112,25 @@ html.dark .docblock-argstable-head th {
     transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
 }
 
-.generic-card:hover {
+.datatable-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.07), 0 4px 10px -2px rgba(0, 0, 0, 0.03);
     border-color: #cbd5e1;
 }
 
-:where(.dark, .dark *) .generic-card {
+:where(.dark, .dark *, [data-theme='dark'], [data-theme='dark'] *) .datatable-card {
     background-color: #1e293b;
     border-color: #334155;
     color: #f8fafc;
     box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
 }
 
-:where(.dark, .dark *) .generic-card:hover {
+:where(.dark, .dark *, [data-theme='dark'], [data-theme='dark'] *) .datatable-card:hover {
     border-color: #475569;
     box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.5);
 }
 
-.generic-card__cell {
+.datatable-card__cell {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -202,32 +140,32 @@ html.dark .docblock-argstable-head th {
     font-size: 0.875rem;
 }
 
-.generic-card__cell--unlabeled {
+.datatable-card__cell--unlabeled {
     display: block;
     padding: 0;
 }
 
-.generic-card__cell--unlabeled:first-child {
+.datatable-card__cell--unlabeled:first-child {
     padding-bottom: 0.75rem;
     border-bottom: 1px solid #f1f5f9;
     margin-bottom: 0.25rem;
 }
 
-:where(.dark, .dark *) .generic-card__cell--unlabeled:first-child {
+:where(.dark, .dark *, [data-theme='dark'], [data-theme='dark'] *) .datatable-card__cell--unlabeled:first-child {
     border-bottom-color: #334155;
 }
 
-.generic-card__cell--unlabeled:last-child {
+.datatable-card__cell--unlabeled:last-child {
     padding-top: 0.75rem;
     border-top: 1px solid #f1f5f9;
     margin-top: 0.25rem;
 }
 
-:where(.dark, .dark *) .generic-card__cell--unlabeled:last-child {
+:where(.dark, .dark *, [data-theme='dark'], [data-theme='dark'] *) .datatable-card__cell--unlabeled:last-child {
     border-top-color: #334155;
 }
 
-.generic-card__label {
+.datatable-card__label {
     font-size: 0.75rem;
     font-weight: 500;
     color: #64748b;
@@ -235,22 +173,22 @@ html.dark .docblock-argstable-head th {
     flex-shrink: 0;
 }
 
-:where(.dark, .dark *) .generic-card__label {
+:where(.dark, .dark *, [data-theme='dark'], [data-theme='dark'] *) .datatable-card__label {
     color: #94a3b8;
 }
 
-.generic-card__value {
+.datatable-card__value {
     font-weight: 500;
     color: #0f172a;
     text-align: right;
     min-width: 0;
 }
 
-.generic-card__cell--unlabeled .generic-card__value {
+.datatable-card__cell--unlabeled .datatable-card__value {
     text-align: left;
 }
 
-:where(.dark, .dark *) .generic-card__value {
+:where(.dark, .dark *, [data-theme='dark'], [data-theme='dark'] *) .datatable-card__value {
     color: #f1f5f9;
 }
 
@@ -258,7 +196,7 @@ html.dark .docblock-argstable-head th {
    SIN DATOS
    ========================= */
 
-.generic-card--empty {
+.datatable-card--empty {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -273,11 +211,11 @@ html.dark .docblock-argstable-head th {
    ========================= */
 
 @media (max-width: 768px) {
-    .generic-cards-grid {
+    .datatable-cards-grid {
         grid-template-columns: 1fr !important;
     }
 
-    .generic-card {
+    .datatable-card {
         padding: 1.25rem;
     }
 }

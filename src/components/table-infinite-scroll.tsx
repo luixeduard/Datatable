@@ -58,7 +58,7 @@ export default function TableInfiniteScroll({
 
     if (!hasMore && !loading) {
         return (
-            <div className="w-full flex justify-center py-4 text-xs font-medium text-slate-400 dark:text-slate-500">
+            <div className="datatable-infinite-scroll-end w-full flex justify-center py-4 text-xs font-medium text-slate-400 dark:text-slate-500">
                 Has llegado al final de los resultados
             </div>
         );
@@ -66,12 +66,12 @@ export default function TableInfiniteScroll({
 
     if (mode === 'manual') {
         return (
-            <div className="w-full flex justify-center py-5">
+            <div className="datatable-infinite-scroll w-full flex justify-center py-5">
                 <button
                     type="button"
                     onClick={onLoadMore}
                     disabled={loading}
-                    className="px-6 py-2.5 text-sm font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 focus:outline-hidden focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:opacity-60 disabled:cursor-not-allowed shadow-sm transition-all duration-150 inline-flex items-center gap-2 cursor-pointer"
+                    className="datatable-infinite-scroll-btn px-6 py-2.5 text-sm font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 focus:outline-hidden focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:opacity-60 disabled:cursor-not-allowed shadow-sm transition-all duration-150 inline-flex items-center gap-2 cursor-pointer"
                 >
                     {loading && (
                         <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24" fill="none">

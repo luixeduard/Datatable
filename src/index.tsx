@@ -128,7 +128,7 @@ function DatatableCore<T>(props: DatatableType<T> & DatatableCoreExtraProps): Re
     const { tableRef, getStickyInfo } = useStickyColumns(columns, filters, filterColumn);
 
     return (
-        <div className="w-full flex flex-col text-slate-800 dark:text-slate-100">
+        <div className="datatable-root w-full flex flex-col text-slate-800 dark:text-slate-100">
             <TableToolbar
                 searching={searching}
                 search={search}
@@ -159,12 +159,12 @@ function DatatableCore<T>(props: DatatableType<T> & DatatableCoreExtraProps): Re
                 />
             ) : (
                 <div
-                    className={`relative overflow-x-auto shadow-2xs sm:rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 ${
+                    className={`datatable-table-container relative overflow-x-auto shadow-2xs sm:rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 ${
                         maxHeight ? 'overflow-y-auto' : ''
                     }`}
                     style={maxHeight ? { maxHeight } : undefined}
                 >
-                    <table ref={tableRef} className="w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400">
+                    <table ref={tableRef} className="datatable-table w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400">
                         <TableHead
                             headers={headers}
                             columns={columns}

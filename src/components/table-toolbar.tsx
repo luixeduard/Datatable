@@ -50,14 +50,14 @@ export default function TableToolbar<T>({
     }
 
     return (
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 w-full px-1 sm:px-0">
+        <div className="datatable-toolbar mb-4 flex flex-wrap items-center justify-between gap-3 w-full px-1 sm:px-0">
             {searching ? (
                 <TableSearch search={search} onSearchChange={onSearchChange} />
             ) : (
                 <div />
             )}
 
-            <div className="ms-auto flex items-center gap-2.5">
+            <div className="datatable-toolbar-actions ms-auto flex items-center gap-2.5">
                 {showColumnSelector && columns && getHeaderLabel && filterColumn && onToggleColumn && (
                     <TableColumnVisibility
                         columns={columns}

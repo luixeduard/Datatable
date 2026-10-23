@@ -35,7 +35,7 @@ export default function CardsView<T>({
 }: CardsViewProps<T>): React.ReactNode {
     if (loading) {
         return (
-            <div className="cards-wrapper w-full datatable-fade-enter">
+            <div className="datatable-cards-wrapper w-full datatable-fade-enter">
                 <div className="flex flex-col justify-center items-center p-12 gap-3">
                     <svg
                         className="animate-spin h-8 w-8 text-blue-600 dark:text-blue-400"
@@ -55,8 +55,8 @@ export default function CardsView<T>({
 
     if (currentData.length === 0) {
         return (
-            <div className="cards-wrapper w-full datatable-fade-enter">
-                <div className="text-center p-12 font-semibold text-slate-400">
+            <div className="datatable-cards-wrapper w-full datatable-fade-enter">
+                <div className="datatable-card--empty text-center p-12 font-semibold text-slate-400">
                     SIN DATOS
                 </div>
             </div>
@@ -64,10 +64,11 @@ export default function CardsView<T>({
     }
 
     return (
-        <div className="cards-wrapper w-full">
+        <div className="datatable-cards-wrapper w-full">
             <div
-                className="generic-cards-grid"
+                className="datatable-cards-grid"
                 style={{
+                    '--datatable-cards-per-row': cardsPerRow,
                     '--cards-per-row': cardsPerRow,
                 } as React.CSSProperties}
             >
@@ -85,7 +86,7 @@ export default function CardsView<T>({
                             onDoubleClick={(evt) => rowDef?.onDoubleClick?.(evt, row)}
                             onClick={(evt) => rowDef?.onClick?.(evt, row)}
                             style={{ animationDelay: `${staggerDelay}ms` }}
-                            className={['generic-card', cardsClassName].filter(Boolean).join(' ')}
+                            className={['datatable-card', cardsClassName].filter(Boolean).join(' ')}
                         >
                             {renderCard ? (
                                 renderCard(row, rowIndex)
@@ -99,16 +100,16 @@ export default function CardsView<T>({
                                         <div
                                             key={`cell-${colIndex}`}
                                             className={[
-                                                'generic-card__cell',
-                                                !showLabel ? 'generic-card__cell--unlabeled' : '',
+                                                'datatable-card__cell',
+                                                !showLabel ? 'datatable-card__cell--unlabeled' : '',
                                             ]
                                                 .filter(Boolean)
                                                 .join(' ')}
                                         >
                                             {showLabel && (
-                                                <span className="generic-card__label">{label}</span>
+                                                <span className="datatable-card__label">{label}</span>
                                             )}
-                                            <div className="generic-card__value">
+                                            <div className="datatable-card__value">
                                                 {renderTd(column, row)}
                                             </div>
                                         </div>

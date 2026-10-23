@@ -1,0 +1,564 @@
+/* ==========================================================================
+   STORYBOOK THEME STYLES (DOCS & CANVAS)
+   Separated from component styles to ensure external consumers of
+   @luix_eduard/datatable do not receive Storybook-specific overrides.
+   ========================================================================== */
+
+:root {
+    color-scheme: light;
+}
+
+html.dark,
+body.dark,
+.dark {
+    color-scheme: dark;
+}
+
+/* Base body background & text colors */
+html.dark,
+body.dark {
+    background-color: #0b0f19;
+    color: #f8fafc;
+}
+
+html.light,
+body.light,
+html:not(.dark),
+body:not(.dark) {
+    background-color: #ffffff;
+    color: #0f172a;
+}
+
+/* ==========================================================================
+   LIGHT THEME IN STORYBOOK (CANVAS & DOCS)
+   ========================================================================== */
+
+/* Raíz de Storybook, páginas de docs e iframes */
+html.light #storybook-root,
+html.light .sb-show-main,
+html.light .sbdocs,
+html.light .sbdocs-wrapper,
+html.light .sbdocs-content,
+html.light .innerZoomElementWrapper,
+html:not(.dark) #storybook-root,
+html:not(.dark) .sb-show-main,
+html:not(.dark) .sbdocs,
+html:not(.dark) .sbdocs-wrapper,
+html:not(.dark) .sbdocs-content,
+html:not(.dark) .innerZoomElementWrapper {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+}
+
+/* Contenedor del canvas en Storybook Docs (anula #anchor--* inyectado por Storybook con ultra-alta especificidad) */
+html.light:not(#_#_) .docs-story,
+html.light:not(#_#_) [id^="anchor--"] .docs-story,
+html.light:not(#_#_) [id*="anchor--"] .docs-story,
+html:not(.dark):not(#_#_) .docs-story,
+html:not(.dark):not(#_#_) [id^="anchor--"] .docs-story,
+html:not(.dark):not(#_#_) [id*="anchor--"] .docs-story {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light .docs-story > div,
+html:not(.dark) .docs-story > div {
+    background-color: transparent !important;
+}
+
+/* Barra de herramientas superior del canvas (sb-bar) */
+html.light:not(#_#_) .sb-bar,
+html.light:not(#_#_) [class*="sb-bar"],
+html.light:not(#_#_) .docs-story .sb-bar,
+html.light:not(#_#_) .docs-story > div:first-child,
+html:not(.dark):not(#_#_) .sb-bar,
+html:not(.dark):not(#_#_) [class*="sb-bar"],
+html:not(.dark):not(#_#_) .docs-story .sb-bar,
+html:not(.dark):not(#_#_) .docs-story > div:first-child {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    color: #64748b !important;
+}
+
+/* Botones de zoom y acciones en la barra sb-bar */
+html.light .sb-bar button,
+html.light [class*="sb-bar"] button,
+html.light .docs-story button,
+html.light .docs-story a,
+html:not(.dark) .sb-bar button,
+html:not(.dark) [class*="sb-bar"] button,
+html:not(.dark) .docs-story button,
+html:not(.dark) .docs-story a {
+    color: #64748b !important;
+    background-color: transparent !important;
+}
+
+html.light .sb-bar button:hover,
+html.light [class*="sb-bar"] button:hover,
+html.light .docs-story button:hover,
+html.light .docs-story a:hover,
+html:not(.dark) .sb-bar button:hover,
+html:not(.dark) [class*="sb-bar"] button:hover,
+html:not(.dark) .docs-story button:hover,
+html:not(.dark) .docs-story a:hover {
+    color: #0f172a !important;
+    background-color: #f1f5f9 !important;
+}
+
+html.light .sb-bar svg,
+html.light [class*="sb-bar"] svg,
+html:not(.dark) .sb-bar svg,
+html:not(.dark) [class*="sb-bar"] svg {
+    fill: currentColor !important;
+    stroke: currentColor !important;
+}
+
+/* Botón Show Code en modo claro */
+html.light:not(#_#_) .docblock-code-toggle,
+html:not(.dark):not(#_#_) .docblock-code-toggle {
+    background-color: #f8fafc !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+html.light:not(#_#_) .docblock-code-toggle:hover,
+html:not(.dark):not(#_#_) .docblock-code-toggle:hover {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+}
+
+/* ==========================================================================
+   DOCBLOCK-SOURCE (BLOQUES DE CÓDIGO ABIERTO EN MODO CLARO)
+   ========================================================================== */
+
+html.light .docblock-source,
+html.light .docblock-source pre,
+html.light .docblock-source code,
+html.light .docblock-source > div,
+html:not(.dark) .docblock-source,
+html:not(.dark) .docblock-source pre,
+html:not(.dark) .docblock-source code,
+html:not(.dark) .docblock-source > div {
+    background-color: #f8fafc !important;
+    background: #f8fafc !important;
+    color: #0f172a !important;
+    border-color: #e2e8f0 !important;
+}
+
+html.light .docblock-source .token.keyword,
+html:not(.dark) .docblock-source .token.keyword {
+    color: #0284c7 !important;
+}
+
+html.light .docblock-source .token.string,
+html:not(.dark) .docblock-source .token.string {
+    color: #059669 !important;
+}
+
+html.light .docblock-source .token.function,
+html:not(.dark) .docblock-source .token.function {
+    color: #7c3aed !important;
+}
+
+html.light .docblock-source .token.comment,
+html:not(.dark) .docblock-source .token.comment {
+    color: #94a3b8 !important;
+}
+
+html.light .docblock-source .token.punctuation,
+html:not(.dark) .docblock-source .token.punctuation {
+    color: #64748b !important;
+}
+
+html.light .docblock-source .token.tag,
+html:not(.dark) .docblock-source .token.tag {
+    color: #2563eb !important;
+}
+
+html.light .docblock-source .token.attr-name,
+html:not(.dark) .docblock-source .token.attr-name {
+    color: #0d9488 !important;
+}
+
+html.light .docblock-source .token.attr-value,
+html:not(.dark) .docblock-source .token.attr-value {
+    color: #059669 !important;
+}
+
+html.light .docblock-source .token.operator,
+html:not(.dark) .docblock-source .token.operator {
+    color: #d97706 !important;
+}
+
+html.light .docblock-source button,
+html:not(.dark) .docblock-source button {
+    background-color: #ffffff !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* ==========================================================================
+   DOCBLOCK-ARGSTABLE (TABLA DE PROPS Y CONTROLES EN MODO CLARO)
+   ========================================================================== */
+
+/* Contenedor principal de la tabla de argumentos */
+html.light .docblock-argstable,
+html.light table.docblock-argstable,
+html.light .sbdocs-content table,
+html:not(.dark) .docblock-argstable,
+html:not(.dark) table.docblock-argstable,
+html:not(.dark) .sbdocs-content table {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    color: #334155 !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Encabezados de columnas (Name, Description, Default, Control) */
+html.light .docblock-argstable-head,
+html.light .docblock-argstable thead,
+html.light .docblock-argstable-head th,
+html.light .docblock-argstable thead th,
+html:not(.dark) .docblock-argstable-head,
+html:not(.dark) .docblock-argstable thead,
+html:not(.dark) .docblock-argstable-head th,
+html:not(.dark) .docblock-argstable thead th {
+    background-color: #f8fafc !important;
+    background: #f8fafc !important;
+    color: #475569 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+/* Filas y celdas individuales */
+html.light .docblock-argstable tbody,
+html.light .docblock-argstable tbody tr,
+html.light .docblock-argstable tbody td,
+html.light .docblock-argstable td,
+html:not(.dark) .docblock-argstable tbody,
+html:not(.dark) .docblock-argstable tbody tr,
+html:not(.dark) .docblock-argstable tbody td,
+html:not(.dark) .docblock-argstable td {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    color: #334155 !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+}
+
+html.light .docblock-argstable tbody tr:hover,
+html.light .docblock-argstable tbody tr:hover td,
+html:not(.dark) .docblock-argstable tbody tr:hover,
+html:not(.dark) .docblock-argstable tbody tr:hover td {
+    background-color: #f8fafc !important;
+    background: #f8fafc !important;
+}
+
+/* Nombres de propiedades (columna 1: control, columns, headers, footers...) */
+html.light .docblock-argstable td:first-child,
+html.light .docblock-argstable td:first-child span,
+html.light .docblock-argstable td:first-child b,
+html:not(.dark) .docblock-argstable td:first-child,
+html:not(.dark) .docblock-argstable td:first-child span,
+html:not(.dark) .docblock-argstable td:first-child b {
+    color: #0f172a !important;
+    font-weight: 600 !important;
+}
+
+/* Badges de tipo (columna 2: string, array...) */
+html.light .docblock-argstable code,
+html.light .docblock-argstable span[class*="css-"],
+html:not(.dark) .docblock-argstable code,
+html:not(.dark) .docblock-argstable span[class*="css-"] {
+    background-color: #f1f5f9 !important;
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* Inputs, textareas y selects de control (columna 4: back...) */
+html.light .docblock-argstable textarea,
+html.light .docblock-argstable input,
+html.light .docblock-argstable select,
+html:not(.dark) .docblock-argstable textarea,
+html:not(.dark) .docblock-argstable input,
+html:not(.dark) .docblock-argstable select {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+}
+
+/* Árboles colapsables en columna de control (columns : [...], headers : [...]) */
+html.light .docblock-argstable [class*="tree"],
+html.light .docblock-argstable [class*="Tree"],
+html.light .docblock-argstable [class*="object"],
+html:not(.dark) .docblock-argstable [class*="tree"],
+html:not(.dark) .docblock-argstable [class*="Tree"],
+html:not(.dark) .docblock-argstable [class*="object"] {
+    background-color: #f8fafc !important;
+    background: #f8fafc !important;
+    color: #334155 !important;
+}
+
+/* Botones en la tabla de controles (RAW, expandir, etc.) */
+html.light .docblock-argstable button,
+html.light .docblock-argstable [class*="raw"],
+html.light .docblock-argstable [class*="Raw"],
+html:not(.dark) .docblock-argstable button,
+html:not(.dark) .docblock-argstable [class*="raw"],
+html:not(.dark) .docblock-argstable [class*="Raw"] {
+    background-color: #f1f5f9 !important;
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 4px !important;
+}
+
+html.light .docblock-argstable button:hover,
+html:not(.dark) .docblock-argstable button:hover {
+    background-color: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+html.light .docblock-argstable svg,
+html:not(.dark) .docblock-argstable svg {
+    fill: currentColor !important;
+}
+
+/* ==========================================================================
+   TÍTULOS Y TEXTOS GENERALES DE DOCS EN MODO CLARO
+   ========================================================================== */
+
+html.light .sbdocs h1,
+html.light .sbdocs h2,
+html.light .sbdocs h3,
+html.light .sbdocs h4,
+html:not(.dark) .sbdocs h1,
+html:not(.dark) .sbdocs h2,
+html:not(.dark) .sbdocs h3,
+html:not(.dark) .sbdocs h4 {
+    color: #0f172a !important;
+}
+
+html.light .sbdocs p,
+html.light .sbdocs li,
+html.light .sbdocs td,
+html.light .sbdocs th,
+html.light .sbdocs span,
+html:not(.dark) .sbdocs p,
+html:not(.dark) .sbdocs li,
+html:not(.dark) .sbdocs td,
+html:not(.dark) .sbdocs th,
+html:not(.dark) .sbdocs span {
+    color: #334155 !important;
+}
+
+html.light .sbdocs pre,
+html.light .sbdocs code,
+html:not(.dark) .sbdocs pre,
+html:not(.dark) .sbdocs code {
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* ==========================================================================
+   DARK THEME IN STORYBOOK (CANVAS & DOCS)
+   ========================================================================== */
+
+/* Fondo oscuro en Storybook canvas, iframe y Docs cuando dark está activo */
+html.dark #storybook-root,
+html.dark .sb-show-main,
+html.dark .sbdocs,
+html.dark .sbdocs-wrapper,
+html.dark .sbdocs-content,
+html.dark .innerZoomElementWrapper {
+    background-color: #0b0f19 !important;
+    color: #f8fafc !important;
+}
+
+/* En Storybook Docs: contenedor de la historia (canvas) */
+html.dark:not(#_#_) .docs-story,
+html.dark:not(#_#_) [id^="anchor--"] .docs-story,
+html.dark:not(#_#_) [id*="anchor--"] .docs-story {
+    background: #0b0f19 !important;
+    background-color: #0b0f19 !important;
+    border-color: #1e293b !important;
+}
+
+html.dark .docs-story > div {
+    background-color: transparent !important;
+}
+
+/* Barra de herramientas superior del canvas en modo oscuro */
+html.dark:not(#_#_) .sb-bar,
+html.dark:not(#_#_) [class*="sb-bar"],
+html.dark:not(#_#_) .docs-story .sb-bar,
+html.dark:not(#_#_) .docs-story > div:first-child {
+    background: #0b0f19 !important;
+    background-color: #0b0f19 !important;
+    border-bottom: 1px solid #1e293b !important;
+    color: #94a3b8 !important;
+}
+
+/* Barra de herramientas y zoom en Storybook Docs */
+html.dark .sb-bar button,
+html.dark [class*="sb-bar"] button,
+html.dark .docs-story button,
+html.dark .docs-story a {
+    color: #94a3b8 !important;
+    background-color: transparent !important;
+}
+
+html.dark .sb-bar button:hover,
+html.dark [class*="sb-bar"] button:hover,
+html.dark .docs-story button:hover,
+html.dark .docs-story a:hover {
+    color: #f8fafc !important;
+    background-color: #1e293b !important;
+}
+
+html.dark .sb-bar svg,
+html.dark [class*="sb-bar"] svg {
+    fill: currentColor !important;
+    stroke: currentColor !important;
+}
+
+/* Botón Show Code en modo oscuro */
+html.dark:not(#_#_) .docblock-code-toggle {
+    background-color: #1e293b !important;
+    color: #94a3b8 !important;
+    border: 1px solid #334155 !important;
+}
+
+html.dark:not(#_#_) .docblock-code-toggle:hover {
+    background-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+/* Bloques de código abierto (Source code) en modo oscuro */
+html.dark .docblock-source,
+html.dark .docblock-source pre,
+html.dark .docblock-source code,
+html.dark .docblock-source > div {
+    background-color: #0f172a !important;
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1px solid #1e293b !important;
+}
+
+html.dark .docblock-source button {
+    background-color: #1e293b !important;
+    color: #94a3b8 !important;
+    border: 1px solid #334155 !important;
+}
+
+/* Tabla de argumentos y controles (docblock-argstable) en modo oscuro */
+html.dark .docblock-argstable,
+html.dark table.docblock-argstable,
+html.dark .sbdocs-content table {
+    background-color: #0f172a !important;
+    background: #0f172a !important;
+    color: #cbd5e1 !important;
+    border: 1px solid #1e293b !important;
+}
+
+html.dark .docblock-argstable-head th,
+html.dark .docblock-argstable thead th {
+    background-color: #1e293b !important;
+    background: #1e293b !important;
+    color: #94a3b8 !important;
+    border-bottom: 1px solid #334155 !important;
+}
+
+html.dark .docblock-argstable tbody tr,
+html.dark .docblock-argstable tbody td,
+html.dark .docblock-argstable td {
+    background-color: #0f172a !important;
+    background: #0f172a !important;
+    color: #cbd5e1 !important;
+    border-bottom: 1px solid #1e293b !important;
+}
+
+html.dark .docblock-argstable tbody tr:hover,
+html.dark .docblock-argstable tbody tr:hover td {
+    background-color: #1e293b !important;
+    background: #1e293b !important;
+}
+
+html.dark .docblock-argstable td:first-child,
+html.dark .docblock-argstable td:first-child span,
+html.dark .docblock-argstable td:first-child b {
+    color: #f8fafc !important;
+}
+
+html.dark .docblock-argstable code,
+html.dark .docblock-argstable span[class*="css-"] {
+    background-color: #1e293b !important;
+    background: #1e293b !important;
+    color: #cbd5e1 !important;
+    border: 1px solid #334155 !important;
+}
+
+html.dark .docblock-argstable textarea,
+html.dark .docblock-argstable input,
+html.dark .docblock-argstable select {
+    background-color: #1e293b !important;
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    border: 1px solid #334155 !important;
+    border-radius: 6px !important;
+}
+
+html.dark .docblock-argstable [class*="tree"],
+html.dark .docblock-argstable [class*="Tree"],
+html.dark .docblock-argstable [class*="object"] {
+    background-color: #0b0f19 !important;
+    background: #0b0f19 !important;
+    color: #cbd5e1 !important;
+}
+
+html.dark .docblock-argstable button,
+html.dark .docblock-argstable [class*="raw"],
+html.dark .docblock-argstable [class*="Raw"] {
+    background-color: #1e293b !important;
+    background: #1e293b !important;
+    color: #94a3b8 !important;
+    border: 1px solid #334155 !important;
+    border-radius: 4px !important;
+}
+
+html.dark .docblock-argstable button:hover {
+    background-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+html.dark .docblock-argstable svg {
+    fill: currentColor !important;
+}
+
+/* Títulos y textos de Storybook Docs en modo oscuro */
+html.dark .sbdocs h1,
+html.dark .sbdocs h2,
+html.dark .sbdocs h3,
+html.dark .sbdocs h4 {
+    color: #f8fafc !important;
+}
+
+html.dark .sbdocs p,
+html.dark .sbdocs li,
+html.dark .sbdocs td,
+html.dark .sbdocs th {
+    color: #cbd5e1 !important;
+}
+
+html.dark .sbdocs pre,
+html.dark .sbdocs code {
+    background-color: #1e293b !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+}

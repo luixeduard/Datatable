@@ -103,7 +103,7 @@ export default function TableHead<T>({
 
     return (
         <thead
-            className={`text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-800 dark:text-slate-300 border-b border-slate-200 dark:border-slate-700 ${
+            className={`datatable-thead text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-800 dark:text-slate-300 border-b border-slate-200 dark:border-slate-700 ${
                 stickyHeader ? 'sticky top-0 z-20' : ''
             }`}
         >
@@ -119,7 +119,7 @@ export default function TableHead<T>({
                             <th
                                 scope="col"
                                 style={stickyStyle}
-                                className={`px-6 py-3.5 text-left font-semibold tracking-wider border-b border-slate-200 dark:border-slate-700 ${stickyClass} ${
+                                className={`datatable-th px-6 py-3.5 text-left font-semibold tracking-wider border-b border-slate-200 dark:border-slate-700 ${stickyClass} ${
                                     isOrderable
                                         ? 'hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer select-none transition-colors'
                                         : ''
@@ -150,7 +150,7 @@ export default function TableHead<T>({
                                         colSpan={header.colspan}
                                         scope="col"
                                         style={stickyStyle}
-                                        className={`px-6 py-3.5 text-left font-semibold tracking-wider border-b border-slate-200 dark:border-slate-700 ${stickyClass} ${
+                                        className={`datatable-th px-6 py-3.5 text-left font-semibold tracking-wider border-b border-slate-200 dark:border-slate-700 ${stickyClass} ${
                                             isOrderable
                                                 ? 'hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer select-none transition-colors'
                                                 : ''

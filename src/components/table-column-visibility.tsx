@@ -54,13 +54,13 @@ export default function TableColumnVisibility<T>({
     const visibleCount = columns.filter((col, index) => filterColumn(col, index)).length;
 
     return (
-        <div ref={containerRef} className="relative inline-block text-left">
+        <div ref={containerRef} className="datatable-column-visibility relative inline-block text-left shrink-0">
             <button
                 type="button"
                 onClick={() => setIsOpen((prev) => !prev)}
                 aria-expanded={isOpen}
                 aria-haspopup="true"
-                className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-slate-300 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700/80 dark:focus:ring-slate-700 shadow-2xs transition-colors cursor-pointer"
+                className="datatable-column-visibility-btn inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-slate-300 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700/80 dark:focus:ring-slate-700 shadow-2xs transition-colors cursor-pointer shrink-0"
             >
                 <svg
                     className="w-4 h-4 text-slate-500 dark:text-slate-400"
@@ -83,7 +83,7 @@ export default function TableColumnVisibility<T>({
             {isOpen && (
                 <div
                     role="menu"
-                    className="absolute right-0 z-50 mt-2 w-60 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xl p-2.5 datatable-fade-enter"
+                    className="datatable-column-visibility-menu absolute right-0 z-50 mt-2 w-60 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xl p-2.5 datatable-fade-enter"
                 >
                     <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100 dark:border-slate-800 px-1">
                         <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
@@ -109,7 +109,7 @@ export default function TableColumnVisibility<T>({
                             return (
                                 <label
                                     key={`col-vis-${index}`}
-                                    className={`flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg text-xs transition-colors select-none ${
+                                    className={`datatable-column-visibility-item flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg text-xs transition-colors select-none ${
                                         isSingleVisible
                                             ? 'opacity-60 cursor-not-allowed'
                                             : 'hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer'
@@ -123,7 +123,7 @@ export default function TableColumnVisibility<T>({
                                         checked={isVisible}
                                         disabled={isSingleVisible}
                                         onChange={() => onToggleColumn(index)}
-                                        className="w-4 h-4 text-blue-600 rounded-sm border-slate-300 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:focus:ring-blue-600 cursor-pointer"
+                                        className="datatable-column-visibility-checkbox w-4 h-4 text-blue-600 rounded-sm border-slate-300 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:focus:ring-blue-600 cursor-pointer"
                                     />
                                 </label>
                             );

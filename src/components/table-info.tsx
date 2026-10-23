@@ -28,7 +28,7 @@ export default function TableInfo({
 
     return (
         <div
-            className="text-xs font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 rounded-lg px-3 py-1.5 shadow-2xs"
+            className="datatable-info text-xs font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 rounded-lg px-3 py-1.5 shadow-2xs shrink-0"
             role="status"
             aria-live="polite"
         >

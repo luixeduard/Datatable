@@ -20,18 +20,18 @@ export default function TablePageSize({
     onChange,
 }: TablePageSizeProps): React.ReactNode {
     return (
-        <div className="flex items-center gap-2">
+        <div className="datatable-page-size flex items-center gap-2 shrink-0">
             <label
-                htmlFor="table-page-size-select"
-                className="text-xs font-medium text-slate-500 dark:text-slate-400 select-none"
+                htmlFor="datatable-page-size-select"
+                className="datatable-page-size-label text-xs font-medium text-slate-500 dark:text-slate-400 select-none"
             >
                 Mostrando:
             </label>
             <select
-                id="table-page-size-select"
+                id="datatable-page-size-select"
                 value={records}
                 onChange={onChange}
-                className="bg-white border border-slate-200 text-slate-800 text-xs font-semibold rounded-lg focus:border-slate-400 focus:ring-1 focus:ring-slate-400 p-2 dark:bg-slate-800 dark:border-slate-700 dark:text-white transition-colors cursor-pointer shadow-2xs"
+                className="datatable-page-size-select bg-white border border-slate-200 text-slate-800 text-xs font-semibold rounded-lg focus:border-slate-400 focus:ring-1 focus:ring-slate-400 p-2 dark:bg-slate-800 dark:border-slate-700 dark:text-white transition-colors cursor-pointer shadow-2xs"
             >
                 {lengthMenu.map((value, idx) => {
                     const optValue = typeof value === 'number' ? value : value.value;

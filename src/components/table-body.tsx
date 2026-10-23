@@ -81,7 +81,7 @@ export default function TableBody<T>({
     }
 
     return (
-        <tbody className="divide-y divide-slate-200/80 dark:divide-slate-700/80">
+        <tbody className="datatable-tbody divide-y divide-slate-200/80 dark:divide-slate-700/80">
             {currentData.map((row, rowIndex) => {
                 const record = row as Record<string, unknown> | null | undefined;
                 const rowKey =
@@ -96,7 +96,7 @@ export default function TableBody<T>({
                         onDoubleClick={(evt) => rowDef?.onDoubleClick?.(evt, row)}
                         onClick={(evt) => rowDef?.onClick?.(evt, row)}
                         style={{ animationDelay: `${staggerDelay}ms` }}
-                        className="datatable-row-animated group bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors"
+                        className="datatable-row datatable-row-animated group bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors"
                     >
                         {columns.map((column, colIndex) => {
                             if (!filterColumn(column, colIndex)) return null;
@@ -119,7 +119,7 @@ export default function TableBody<T>({
                                 <td
                                     key={`td-${colIndex}`}
                                     style={stickyStyle}
-                                    className={`px-6 py-4 text-sm text-slate-700 dark:text-slate-300 ${stickyClass} ${customClass ?? ''}`}
+                                    className={`datatable-td px-6 py-4 text-sm text-slate-700 dark:text-slate-300 ${stickyClass} ${customClass ?? ''}`}
                                 >
                                     {renderTd(column, row)}
                                 </td>

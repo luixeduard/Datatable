@@ -2,6 +2,7 @@ import type { Preview } from '@storybook/react';
 import { themes } from '@storybook/theming';
 import { withThemeByClassName } from '@storybook/addon-themes';
 import '../src/index.css';
+import './storybook.css';
 
 const preview: Preview = {
     parameters: {
@@ -9,12 +10,7 @@ const preview: Preview = {
             theme: themes.dark,
         },
         backgrounds: {
-            default: 'dark',
-            values: [
-                { name: 'dark', value: '#0b0f19' },
-                { name: 'slate', value: '#0f172a' },
-                { name: 'light', value: '#ffffff' },
-            ],
+            disable: true,
         },
         controls: {
             matchers: {

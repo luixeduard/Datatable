@@ -19,8 +19,8 @@ export default function TableSearch({
     placeholder = 'Buscar...',
 }: TableSearchProps): React.ReactNode {
     return (
-        <div className="relative w-full max-w-md">
-            <label htmlFor="table-search" className="sr-only">
+        <div className="datatable-search relative w-full max-w-md">
+            <label htmlFor="datatable-search-input" className="sr-only">
                 Buscar
             </label>
 
@@ -43,13 +43,13 @@ export default function TableSearch({
             </div>
 
             <input
-                id="table-search"
+                id="datatable-search-input"
                 type="text"
                 placeholder={placeholder}
                 value={search}
                 onChange={({ currentTarget }) => onSearchChange(currentTarget.value)}
                 onInput={({ currentTarget }) => onSearchChange(currentTarget.value)}
-                className="block w-full rounded-xl border border-slate-200 bg-white py-2 pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 focus:outline-hidden dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:placeholder-slate-500 transition-colors shadow-2xs"
+                className="datatable-search-input block w-full rounded-xl border border-slate-200 bg-white py-2 pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 focus:outline-hidden dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:placeholder-slate-500 transition-colors shadow-2xs"
             />
         </div>
     );

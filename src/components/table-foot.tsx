@@ -29,7 +29,7 @@ export default function TableFoot<T>({
     const advancedFooters = footers.every((header) => typeof header !== 'string');
 
     return (
-        <tfoot className="text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-800 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700">
+        <tfoot className="datatable-tfoot text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-800 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700">
             {!advancedFooters ? (
                 <tr>
                     {(footers as string[]).map((foot, index) => {
@@ -53,7 +53,7 @@ export default function TableFoot<T>({
                             <th
                                 scope="col"
                                 style={stickyStyle}
-                                className={`px-6 py-3 font-semibold ${stickyClass}`}
+                                className={`datatable-tfoot-th px-6 py-3 font-semibold ${stickyClass}`}
                                 key={`tfoot-${index}`}
                             >
                                 <span className="flex items-center">{foot}</span>
@@ -85,7 +85,7 @@ export default function TableFoot<T>({
                                         rowSpan={foot.rowspan}
                                         colSpan={foot.colspan}
                                         style={stickyStyle}
-                                        className={`px-6 py-3 font-semibold ${stickyClass}`}
+                                        className={`datatable-tfoot-th px-6 py-3 font-semibold ${stickyClass}`}
                                     >
                                         <span className="flex items-center">{foot.label}</span>
                                     </th>

@@ -75,11 +75,11 @@ export default function TablePagination({
                     type="button"
                     onClick={() => setPage(value - 1)}
                     aria-current={isActive ? 'page' : undefined}
-                    className={`cursor-pointer select-none flex items-center justify-center px-3.5 h-9 text-xs font-semibold leading-tight border transition-colors ${
+                    className={`datatable-pagination-btn cursor-pointer select-none flex items-center justify-center min-w-9 shrink-0 px-3.5 h-9 text-xs font-semibold leading-tight border transition-colors ${
                         isFirst ? 'rounded-s-lg' : ''
                     } ${isLast ? 'rounded-e-lg' : ''} ${
                         isActive
-                            ? 'z-10 text-slate-900 border-slate-300 bg-slate-100 font-bold dark:border-slate-600 dark:bg-slate-700 dark:text-white'
+                            ? 'datatable-pagination-btn--active z-10 text-blue-600 bg-blue-50 border-blue-200 font-bold dark:bg-blue-950/80 dark:text-blue-300 dark:border-blue-700'
                             : 'text-slate-600 bg-white border-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white'
                     }`}
                 >
@@ -94,7 +94,7 @@ export default function TablePagination({
                     type="button"
                     onClick={() => setPage((val) => Math.max(0, val - 1))}
                     title="Página anterior"
-                    className={`cursor-pointer select-none flex items-center justify-center px-3 h-9 text-xs leading-tight text-slate-500 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white transition-colors ${
+                    className={`datatable-pagination-btn datatable-pagination-btn--nav cursor-pointer select-none flex items-center justify-center min-w-9 shrink-0 px-3 h-9 text-xs leading-tight text-slate-500 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white transition-colors ${
                         isFirst ? 'rounded-s-lg' : ''
                     }`}
                 >
@@ -112,7 +112,7 @@ export default function TablePagination({
                     type="button"
                     onClick={() => setPage(0)}
                     title="Primera página"
-                    className={`cursor-pointer select-none flex items-center justify-center px-3 h-9 text-xs leading-tight text-slate-500 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white transition-colors ${
+                    className={`datatable-pagination-btn datatable-pagination-btn--nav cursor-pointer select-none flex items-center justify-center min-w-9 shrink-0 px-3 h-9 text-xs leading-tight text-slate-500 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white transition-colors ${
                         isFirst ? 'rounded-s-lg' : ''
                     }`}
                 >
@@ -130,7 +130,7 @@ export default function TablePagination({
                     type="button"
                     onClick={() => setPage((val) => val + 1)}
                     title="Página siguiente"
-                    className={`cursor-pointer select-none flex items-center justify-center px-3 h-9 text-xs leading-tight text-slate-500 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white transition-colors ${
+                    className={`datatable-pagination-btn datatable-pagination-btn--nav cursor-pointer select-none flex items-center justify-center min-w-9 shrink-0 px-3 h-9 text-xs leading-tight text-slate-500 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white transition-colors ${
                         isLast ? 'rounded-e-lg' : ''
                     }`}
                 >
@@ -147,7 +147,7 @@ export default function TablePagination({
                 type="button"
                 onClick={() => setPage(totalPages)}
                 title="Última página"
-                className={`cursor-pointer select-none flex items-center justify-center px-3 h-9 text-xs leading-tight text-slate-500 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white transition-colors ${
+                className={`datatable-pagination-btn datatable-pagination-btn--nav cursor-pointer select-none flex items-center justify-center min-w-9 shrink-0 px-3 h-9 text-xs leading-tight text-slate-500 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white transition-colors ${
                     isLast ? 'rounded-e-lg' : ''
                 }`}
             >
@@ -164,10 +164,10 @@ export default function TablePagination({
     }
 
     return (
-        <nav aria-label="Navegación de páginas">
-            <ul className="flex items-center -space-x-px h-9 text-xs shadow-2xs">
+        <nav aria-label="Navegación de páginas" className="datatable-pagination shrink-0">
+            <ul className="datatable-pagination-list flex items-center -space-x-px h-9 text-xs shadow-2xs shrink-0">
                 {buttons.map((valuePagging, index) => (
-                    <li key={`page-btn-${index}-${valuePagging}`}>
+                    <li key={`page-btn-${index}-${valuePagging}`} className="datatable-pagination-item shrink-0">
                         {renderButton(valuePagging, index)}
                     </li>
                 ))}

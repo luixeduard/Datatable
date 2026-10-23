@@ -38,7 +38,7 @@ export default function TablePaginationBar({
 
     return (
         <nav
-            className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 w-full"
+            className="datatable-pagination-bar flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 w-full"
             aria-label="Navegación de tabla"
         >
             <TablePageSize
