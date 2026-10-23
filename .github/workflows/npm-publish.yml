@@ -8,6 +8,8 @@ on:
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
+    env:
+      DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -23,11 +25,11 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
       - name: Discord notification (error)
-        if: (steps.npm_install.outcome == 'failure' || steps.run_npm_publish.outcome == 'failure') && secrets.DISCORD_WEBHOOK != ''
+        if: (steps.npm_install.outcome == 'failure' || steps.run_npm_publish.outcome == 'failure') && env.DISCORD_WEBHOOK != ''
         uses: Ilshidur/action-discord@master
         continue-on-error: true
         env:
-            DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+            DISCORD_WEBHOOK: ${{ env.DISCORD_WEBHOOK }}
             DISCORD_EMBEDS: |
                 [
                   {
@@ -45,11 +47,11 @@ jobs:
 
       # Notificación a Discord en caso de éxito
       - name: Discord notification (success)
-        if: steps.npm_install.outcome == 'success' && steps.run_npm_publish.outcome == 'success' && secrets.DISCORD_WEBHOOK != ''
+        if: steps.npm_install.outcome == 'success' && steps.run_npm_publish.outcome == 'success' && env.DISCORD_WEBHOOK != ''
         uses: Ilshidur/action-discord@master
         continue-on-error: true
         env:
-            DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+            DISCORD_WEBHOOK: ${{ env.DISCORD_WEBHOOK }}
             DISCORD_EMBEDS: |
                 [
                   {
