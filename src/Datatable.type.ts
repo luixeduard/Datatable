@@ -10,6 +10,8 @@ export type Column<T = unknown> = {
   ) => React.ReactNode;
   format?: FormatType<T>;
   formatOptions?: Intl.NumberFormatOptions | FormatOptions;
+  hideCardLabel?: boolean;
+  sticky?: boolean;
 };
 
 export type FormatType<T = unknown> =
@@ -52,6 +54,7 @@ export type ColumnDef = (
   searchable?: boolean;
   classname?: ClassNameType;
   orderable?: boolean;
+  sticky?: boolean;
 };
 
 export type onClickEvent<T = unknown> = (
@@ -107,9 +110,17 @@ type CommonDatatableProps<T> = {
   cardsRender?: boolean | 'auto';
   cardsClassName?: string;
   cardsPerRow?: number;
+  renderCard?: (data: T, rowIndex: number) => React.ReactNode;
   tableId?: string;
   store?: unknown;
   restoreScroll?: boolean;
+  infiniteScroll?: boolean | 'auto' | 'manual';
+  enableInfiniteScroll?: boolean;
+  infiniteScrollMode?: 'auto' | 'manual';
+  infiniteScrollButtonText?: string;
+  columnVisibility?: boolean;
+  stickyHeader?: boolean;
+  maxHeight?: string | number;
 };
 
 type BackControlDatatable<T> = CommonDatatableProps<T> & {
@@ -132,3 +143,20 @@ type FrontControlDatatable<T> = CommonDatatableProps<T> & {
 );
 
 export type DatatableType<T = unknown> = BackControlDatatable<T> | FrontControlDatatable<T>;
+
+export interface DatatableCoreExtraProps {
+  initialSearch?: string;
+  initialPage?: number;
+  initialRecords?: number;
+  initialOrder?: [number, -1 | 'ASC' | 'DESC' | 1][];
+  initialViewMode?: 'table' | 'cards';
+  initialVisibleColumns?: Record<number, boolean>;
+  onTableStateChange?: (state: {
+    search: string;
+    page: number;
+    records: number;
+    order: [number, -1 | 'ASC' | 'DESC' | 1][];
+    viewMode?: 'table' | 'cards';
+    visibleColumns?: Record<number, boolean>;
+  }) => void;
+}
