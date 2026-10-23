@@ -1,9 +1,9 @@
 {
   "name": "@luix_eduard/datatable",
   "private": false,
-  "version": "3.0.0",
+  "version": "3.0.1",
   "type": "module",
-  "description": "Datatable v2",
+  "description": "Datatable",
   "author": "luix_eduard",
   "license": "MIT",
   "style": "dist/index.css",
